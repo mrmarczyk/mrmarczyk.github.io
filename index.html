@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mrmarczyk / workstation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+
+<!--
+════════════════════════════════════════════════════════
+  HOW TO UPDATE THIS PAGE
+════════════════════════════════════════════════════════
+
+  IMAGE STRUCTURE (GitHub repo) — served as WebP, originals live in Sources/:
+  /img/01-witness/
+    character-sheet.webp      (character-sheet_3x3.png)
+    scar-closeup.webp         (ref_03_kotwica.png)
+    portrait.webp             (documentary portrait)
+    scene-queue.webp          (street queue)
+    scene-reading.webp        (reading newspaper)
+    scene-kitchen.webp        (kitchen)
+  /img/02-fashion/
+    screenshot-workflow.webp  (Freepik/Magnific screenshot)
+  /img/04-film/
+    pipeline-diagram.webp     (pipeline-portfolio-diagram.png)
+  /img/05-corporate/
+    pipeline-diagram.webp     (corporate-video-pipeline.png)
+
+  TO UPDATE AN IMAGE:
+    Drop the new source in Sources/ and re-encode to the same .webp filename —
+    the HTML reference does not change. Photos:
+      ffmpeg -i SOURCE.png -vf scale=1100:-2 -c:v libwebp -quality 80 TARGET.webp
+    Diagrams and screenshots with text (lossless, keeps type crisp):
+      ffmpeg -i SOURCE.png -c:v libwebp -lossless 1 TARGET.webp
+
+  TO ADD A NEW PROJECT:
+    1. Copy a <section class="project"> block
+    2. Change data-id, the number, title, status badge
+    3. Add your content inside .project-body
+    4. Add a <a class="nav-link"> in the <nav> block
+
+  TO UPDATE A VIDEO LINK:
+    Replace the YouTube ID in the iframe src
+    https://www.youtube.com/embed/YOUR_ID_HERE
+
+  STATUS BADGES:
+    <span class="badge tested">TESTED</span>
+    <span class="badge wip">WIP</span>
+    <span class="badge planned">PLANNED</span>
+════════════════════════════════════════════════════════
+-->
+
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2128;
+  --border: #30363d;
+  --border-strong: #484f58;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --text-faint: #484f58;
+  --green: #3fb950;
+  --green-dim: #1a7f37;
+  --blue: #58a6ff;
+  --amber: #d29922;
+  --red: #f85149;
+  --font: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+img { max-width: 100%; display: block; border-radius: 4px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+/* ── HEADER ── */
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: rgba(13,17,23,0.95);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.header-prompt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-prompt .caret { color: var(--green); font-weight: 700; }
+.header-prompt .path { color: var(--text-muted); }
+.header-prompt .name { color: var(--text); font-weight: 500; }
+.header-prompt .cursor {
+  display: inline-block;
+  width: 8px; height: 14px;
+  background: var(--green);
+  animation: blink 1.2s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.header-links { display: flex; gap: 16px; }
+.header-links a { color: var(--text-muted); font-size: 12px; }
+.header-links a:hover { color: var(--text); text-decoration: none; }
+
+/* ── NAV ── */
+nav {
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  background: var(--bg);
+  overflow-x: auto;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: var(--bg-card);
+  border-color: var(--border);
+  text-decoration: none;
+}
+
+.nav-link::before { content: '$ '; color: var(--green-dim); }
+
+/* ── MAIN LAYOUT ── */
+main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
+
+/* ── HERO ── */
+.hero {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  padding: 32px;
+  margin-bottom: 48px;
+}
+
+.hero-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+
+.hero-sub {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.hero-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.hero-links { display: flex; gap: 16px; }
+.hero-links a { font-size: 12px; color: var(--blue); }
+
+/* ── PROJECT SECTION ── */
+.project {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.project-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.project-num {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.project-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  flex: 1;
+}
+
+.project-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* STATUS BADGES */
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+.badge.tested { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+.badge.wip { background: rgba(210,153,34,0.15); color: var(--amber); border: 1px solid rgba(210,153,34,0.3); }
+.badge.planned { background: rgba(88,166,255,0.1); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
+.badge.draft { background: rgba(139,148,158,0.15); color: var(--text-muted); border: 1px solid var(--border); }
+
+.project-body { padding: 24px; }
+
+/* ── CONTENT ELEMENTS ── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  margin: 36px 0 12px;
+  padding-left: 10px;
+  border-left: 3px solid var(--green);
+  text-transform: uppercase;
+}
+
+/* hairline running to the right edge — splits the body into blocks */
+.section-label::after {
+  content: '';
+  flex: 1 1 auto;
+  min-width: 24px;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-label:first-child { margin-top: 0; }
+
+p { color: var(--text-muted); margin-bottom: 12px; }
+p strong { color: var(--text); font-weight: 500; }
+p:last-child { margin-bottom: 0; }
+
+.lead {
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 20px;
+  border-left: 2px solid var(--green);
+  padding-left: 12px;
+}
+
+/* ── IMAGE GALLERY ── */
+.gallery { display: grid; gap: 8px; margin: 16px 0; align-items: start; }
+.gallery-1 { grid-template-columns: 1fr; }
+.gallery-2 { grid-template-columns: 1fr 1fr; }
+.gallery-3 { grid-template-columns: 1fr 1fr 1fr; }
+.gallery-2-1 { grid-template-columns: 2fr 1fr; }
+
+.gallery img {
+  width: 100%; height: auto;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: opacity 0.2s;
+  cursor: zoom-in;
+}
+
+.gallery img:hover { opacity: 0.85; }
+
+.diagram img { cursor: zoom-in; }
+
+.gallery-caption {
+  font-size: 11px;
+  color: var(--text-faint);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ── PIPELINE STEPS ── */
+.pipeline { margin: 16px 0; }
+
+.pipeline-phase {
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pipeline-phase-header {
+  background: rgba(255,255,255,0.03);
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+}
+
+.pipeline-step {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.pipeline-step:last-child { border-bottom: none; }
+
+.step-num { color: var(--text-faint); min-width: 20px; }
+.step-name { color: var(--text); font-weight: 500; min-width: 160px; }
+.step-desc { color: var(--text-muted); flex: 1; }
+
+/* ── VIDEO EMBED ── */
+.video-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  margin: 16px 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #000;
+}
+
+.video-wrap iframe {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+
+/* Vertical embed for YouTube Shorts (9:16).
+   Sized by HEIGHT, not width: YouTube picks its stream from the rendered
+   player size, so a taller box pulls a higher-resolution vertical stream. */
+.video-wrap-vertical {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  height: min(720px, 72vh);
+  max-width: 100%;
+  margin: 16px auto;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #000;
+}
+
+/* on phones the viewport is the constraint — go back to width-based sizing */
+@media (max-width: 520px) {
+  .video-wrap-vertical { height: auto; width: 100%; max-width: 340px; }
+}
+
+.video-wrap-vertical iframe {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+
+.video-placeholder {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  margin: 16px 0;
+  border-radius: 4px;
+  border: 1px dashed var(--border-strong);
+  background: rgba(255,255,255,0.02);
+}
+
+.video-placeholder-inner {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px;
+}
+
+.video-placeholder-inner span:first-child { color: var(--text-faint); font-size: 12px; }
+.video-placeholder-inner span:last-child { color: var(--text-faint); font-size: 11px; }
+
+/* ── HIGHLIGHT BOX ── */
+.highlight {
+  background: rgba(63,185,80,0.05);
+  border: 1px solid rgba(63,185,80,0.2);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.highlight .hl-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+/* ── LIST ── */
+ul.items { list-style: none; margin: 8px 0 16px; }
+ul.items li { color: var(--text-muted); padding: 4px 0; font-size: 13px; }
+ul.items li::before { content: '→ '; color: var(--green-dim); }
+ul.items li strong { color: var(--text); font-weight: 500; }
+
+/* ── INLINE CODE / TAGS ── */
+code {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--blue);
+}
+
+.tools-row {
+  display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0;
+}
+
+.tool-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: rgba(88,166,255,0.08);
+  border: 1px solid rgba(88,166,255,0.2);
+  color: var(--blue);
+}
+
+/* ── APS SECTION ── */
+.aps-body { padding: 24px; }
+
+.aps-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 8px 16px;
+  border: 1px solid var(--green-dim);
+  border-radius: 4px;
+  color: var(--green);
+  font-size: 13px;
+  transition: all 0.15s;
+}
+
+.aps-link:hover {
+  background: rgba(63,185,80,0.08);
+  text-decoration: none;
+}
+
+/* ── DISCLOSURE ── */
+.disclosure {
+  margin-top: 48px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.disclosure strong { color: var(--text-muted); }
+
+/* ── DIAGRAM ── */
+.diagram { margin: 16px 0; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.diagram img { border-radius: 0; }
+
+/* ── LIGHTBOX ── */
+.lightbox {
+  position: fixed; inset: 0; z-index: 200;
+  display: none;
+  background: rgba(1,4,9,0.94);
+  backdrop-filter: blur(4px);
+}
+.lightbox[open] { display: block; }
+
+.lightbox-stage {
+  position: absolute; inset: 0 0 52px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: auto;
+  padding: 24px;
+  cursor: zoom-in;
+}
+.lightbox-stage img {
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+/* actual-size mode: image overflows and the stage pans */
+.lightbox-stage.actual { cursor: zoom-out; align-items: flex-start; justify-content: flex-start; }
+.lightbox-stage.actual img { max-width: none; max-height: none; margin: auto; }
+
+.lightbox-bar {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  min-height: 52px;
+  display: flex; align-items: center; gap: 16px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  font-size: 11px; color: var(--text-muted);
+}
+.lightbox-caption { flex: 1; }
+.lightbox-hint { color: var(--text-faint); white-space: nowrap; }
+
+.lightbox-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card); color: var(--text);
+  border: 1px solid var(--border); border-radius: 4px;
+  font-family: var(--font); font-size: 16px; line-height: 1;
+  cursor: pointer;
+}
+.lightbox-close:hover { background: var(--bg-card-hover); border-color: var(--border-strong); }
+
+@media (max-width: 640px) {
+  .lightbox-hint { display: none; }
+  .lightbox-stage { padding: 12px; inset: 0 0 46px; }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  main { padding: 32px 20px 72px; }
+  .step-name { min-width: 140px; }
+}
+
+@media (max-width: 720px) {
+  .gallery-3 { grid-template-columns: 1fr 1fr; }
+  .gallery-2-1 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  .gallery-2, .gallery-3, .gallery-2-1 { grid-template-columns: 1fr; }
+  .pipeline-step { flex-direction: column; gap: 4px; }
+  .step-name { min-width: auto; }
+
+  header { padding: 12px 16px; flex-wrap: wrap; gap: 8px 12px; }
+  .header-links { gap: 12px; flex-wrap: wrap; }
+  nav { padding: 10px 16px; }
+
+  main { padding: 24px 16px 64px; }
+  .hero { padding: 20px; }
+  .hero-title { font-size: 19px; }
+
+  .project-header { padding: 14px 16px; gap: 6px 12px; }
+  .project-title { flex: 1 1 100%; font-size: 15px; }
+  .project-body, .aps-body { padding: 16px; }
+
+  .disclosure { padding: 14px; }
+  .section-label { font-size: 11px; margin: 28px 0 10px; gap: 8px; }
+}
+
+@media (max-width: 400px) {
+  body { font-size: 13px; }
+  .hero-links { flex-direction: column; gap: 8px; }
+  .hero { padding: 16px; }
+  .project-body, .aps-body { padding: 14px; }
+}
+</style>
+</head>
+<body>
+
+<h1 class="sr-only">Marcin Marczyk — AI Production Portfolio</h1>
+
+<!-- HEADER -->
+<header>
+  <div class="header-prompt">
+    <span class="caret">$</span>
+    <span class="path">mrmarczyk -</span>
+    <span class="name">workstation</span>
+    <span class="cursor"></span>
+  </div>
+  <div class="header-links">
+    <a href="mailto:mrmarczyk@gmail.com">mrmarczyk@gmail.com</a>
+    <a href="https://linkedin.com/in/mrmarczyk" target="_blank">linkedin</a>
+    <a href="https://github.com/ai4-film/aps-standard" target="_blank">github</a>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav aria-label="Projects">
+  <a class="nav-link" href="#witness">01-witness</a>
+  <a class="nav-link" href="#fashion">02-fashion-pipeline</a>
+  <a class="nav-link" href="#conversation">03-conversation</a>
+  <a class="nav-link" href="#film-workflow">04-film-workflow</a>
+  <a class="nav-link" href="#corporate">05-corporate-workflow</a>
+  <a class="nav-link" href="#aps">06-aps</a>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-title">Marcin Marczyk</div>
+  <div class="hero-sub">AI Creative Producer · Production Coordinator · Udyssey Creative Technologies · Warsaw</div>
+  <div class="hero-tags">
+    <span class="tag">18 years in film & TV production</span>
+    <span class="tag">ElevenLabs Impact Program</span>
+    <span class="tag">AI workflow design</span>
+    <span class="tag">agentic pipelines</span>
+    <span class="tag">author of APS</span>
+  </div>
+  <div class="hero-links">
+    <a href="https://github.com/ai4-film/aps-standard" target="_blank">→ github.com/ai4-film/aps-standard</a>
+    <a href="https://linkedin.com/in/mrmarczyk" target="_blank">→ linkedin</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 01. WITNESS                                            -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="witness">
+  <div class="project-header">
+    <span class="project-num">01</span>
+    <span class="project-title">Witness — Visual Identity Lock</span>
+    <span class="project-subtitle">AI-Assisted Film Production Pipeline · Stage 04</span>
+    <span class="badge tested">TESTED</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">Consistency held by structure, not by model memory.</p>
+
+    <div class="section-label">The problem</div>
+    <p>Generative AI loses characters. Generate a face once — it looks right. Generate it again with different lighting, different angle — and you have a different person. Most practitioners hope the model remembers. It doesn't.</p>
+
+    <div class="section-label">Character definition</div>
+    <ul class="items">
+      <li>Polish woman, approximately 55 years old</li>
+      <li>Early 1980s. Wire-rimmed glasses. Grey wool sweater. Hair pulled back.</li>
+      <li><strong>Defining mark</strong> — a scar on the forehead, used as a biometric anchor across all generations</li>
+    </ul>
+
+    <div class="section-label">Character sheet — canonical truth</div>
+    <!-- REPLACE: img/01-witness/character-sheet.png -->
+    <div class="gallery gallery-1">
+      <img width="930" height="1236" src="img/01-witness/character-sheet.webp" alt="Character sheet — 9 angles of the same character" loading="lazy">
+    </div>
+    <p class="gallery-caption">9-angle character sheet generated at neutral studio conditions. This sheet becomes the canonical reference for every subsequent generation.</p>
+
+    <!-- REPLACE: img/01-witness/scar-closeup.png -->
+    <div class="gallery gallery-2" style="margin-top:8px; align-items:center">
+      <img width="896" height="1200" src="img/01-witness/portrait.webp" alt="Documentary portrait" loading="lazy">
+      <img width="380" height="280" src="img/01-witness/scar-closeup.webp" alt="Close-up of biometric anchor — scar on forehead" loading="lazy">
+    </div>
+    <p class="gallery-caption">Biometric anchor: a scar on the forehead used as a consistency verification tool across all generated frames.</p>
+
+    <div class="section-label">Same character, three environments</div>
+    <div class="gallery gallery-3">
+      <!-- REPLACE these three images -->
+      <img width="1100" height="614" src="img/01-witness/scene-queue.webp" alt="Exterior — street queue, Warsaw 1981" loading="lazy">
+      <img width="1100" height="614" src="img/01-witness/scene-reading.webp" alt="Interior — apartment, evening, reading newspaper" loading="lazy">
+      <img width="1100" height="614" src="img/01-witness/scene-kitchen.webp" alt="Interior — kitchen, daytime" loading="lazy">
+    </div>
+    <ul class="items">
+      <li><strong>Exterior — street queue, 1981 Warsaw</strong> — overcast daylight, crowd. Signs: <code>BRAK TOWARU</code> / <code>ZAMKNIĘTE</code>. Medium shot, documentary framing.</li>
+      <li><strong>Interior — apartment, evening</strong> — single bare bulb. Kitchen table, newspaper, glass of tea. Medium close-up, low key.</li>
+      <li><strong>Interior — kitchen, daytime</strong> — backlit window. Gas stove, enamel pots, lace curtain, jar of preserves. Medium shot from the doorframe.</li>
+    </ul>
+
+    <div class="highlight">
+      <div class="hl-label">RESULT</div>
+      The same woman appears in all three scenes. Same face. Same scar. Same glasses. Different environment, different lighting, different camera angle — consistent identity throughout. This is not achieved by prompting harder. It is achieved by treating the character as a structured data entity, not a text description.
+    </div>
+
+    <div class="section-label">360° reference — VEO 3.1</div>
+    <p>VEO 3.1 generated a turntable rotation of the character on a lazy susan. A still character sheet gives nine fixed angles; the turntable gives continuous profile coverage — the full 360° reference needed for downstream consistency work, where a shot may sit between two of the nine canonical angles.</p>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">Nano Banana Pro (Gemini Flash)</span>
+      <span class="tool-tag">VEO 3.1</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 02. FASHION PIPELINE                                   -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="fashion">
+  <div class="project-header">
+    <span class="project-num">02</span>
+    <span class="project-title">Fashion Pipeline</span>
+    <span class="project-subtitle">Generated model, real product, no shoot day</span>
+    <span class="badge tested">TESTED</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">Brand sends a product photo. Pipeline returns a finished campaign film. No model booking. No studio. No shoot day.</p>
+
+    <!-- VIDEO — replace YouTube ID when ready -->
+    <div class="section-label">Output film</div>
+    <div class="video-wrap-vertical">
+      <iframe
+        src="https://www.youtube.com/embed/RaAqzHmkCfo?cc_load_policy=0&amp;iv_load_policy=3&amp;rel=0&amp;playsinline=1"
+        title="Fashion pipeline — campaign film"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+    <p class="gallery-caption">YouTube Shorts · vertical 9:16 · generated model wearing a real product</p>
+
+    <div class="section-label">Workflow screenshot</div>
+    <!-- REPLACE: img/02-fashion/screenshot-workflow.png -->
+    <div class="gallery gallery-1">
+      <img width="1400" height="894" src="img/02-fashion/screenshot-workflow.webp" alt="Freepik / Magnific workflow screenshot" loading="lazy">
+    </div>
+
+    <div class="section-label">The pipeline</div>
+    <ul class="items">
+      <li><strong>Model generated</strong> — Nano Banana Pro, personal character brief</li>
+      <li><strong>Product sourced</strong> — real sweater from e-commerce store (standard brand assets)</li>
+      <li><strong>Model dressed</strong> — Freepik / Magnific AI editing environment</li>
+      <li><strong>Identity maintained</strong> — same face, same fit, consistent lighting across frames</li>
+      <li><strong>Animation</strong> — static images to motion</li>
+      <li><strong>Edit</strong> — automatic assembly (Claude)</li>
+      <li><strong>Music</strong> — Suno</li>
+    </ul>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">Nano Banana Pro</span>
+      <span class="tool-tag">Freepik</span>
+      <span class="tool-tag">Magnific</span>
+      <span class="tool-tag">Runway / Kling</span>
+      <span class="tool-tag">Claude</span>
+      <span class="tool-tag">Suno</span>
+      <span class="tool-tag">DaVinci Resolve</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 03. CONVERSATION                                       -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="conversation">
+  <div class="project-header">
+    <span class="project-num">03</span>
+    <span class="project-title">Conversation — Nie odbyła się (It Never Happened)</span>
+    <span class="project-subtitle">AI-Generated Dialogue Series · Work in Progress</span>
+    <span class="badge wip">WIP</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">A conversation that never happened. Two versions of the same person — separated by twenty-five years — talk about what artificial intelligence has done to the film industry they both work in.</p>
+
+    <!-- VIDEO — replace YouTube ID when episode 01 is ready -->
+    <div class="section-label">Episode 03 — preview</div>
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/Vlmf-w6uxxg?cc_load_policy=0&amp;iv_load_policy=3&amp;rel=0&amp;playsinline=1"
+        title="Conversation — Nie odbyła się, episode 03 preview"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+    <p class="gallery-caption">Work in progress. Episode 03 available as a preview. 13 episodes fully scripted.</p>
+
+    <div class="section-label">The concept</div>
+    <p>One is 25 years old. The year is 2001. Film is still shot on tape. Crews are large. Budgets are fixed. Every shooting day costs a fortune.</p>
+    <p>One is 50 years old. The year is 2026. He sits alone in front of a screen. He has seen what happened in between.</p>
+    <p>Neither character is named. Neither character promotes a product. This is industry testimony, not advertising.</p>
+
+    <div class="section-label">Episode themes</div>
+    <ul class="items">
+      <li>The disappearance of production crews</li>
+      <li><strong>Without chain of title, the content is worth zero</strong> — no distributor, no insurer, no deal</li>
+      <li>Collapse of the apprenticeship model</li>
+      <li>The impossibility of archiving AI footage</li>
+      <li>Who stops the process when nothing costs money</li>
+      <li>The flooding of festival selections by zero-cost content</li>
+    </ul>
+
+    <div class="section-label">Pipeline</div>
+    <ul class="items">
+      <li><strong>Voice</strong> — ElevenLabs v3, Voice Design. Two distinct voices, same person, twenty-five years apart: age, register, rhythm, hesitation. The younger voice carries an enthusiasm the older one has lost.</li>
+      <li><strong>Image</strong> — Nano Banana Pro with personal likeness reference. Visual Identity Lock methodology applied.</li>
+      <li><strong>Rule</strong> — The older character never has clean answers about industry-wide problems. Only about his own practice.</li>
+    </ul>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">ElevenLabs v3</span>
+      <span class="tool-tag">Nano Banana Pro</span>
+      <span class="tool-tag">VEED fabric</span>
+      <span class="tool-tag">DaVinci Resolve</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 04. FILM WORKFLOW                                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="film-workflow">
+  <div class="project-header">
+    <span class="project-num">04</span>
+    <span class="project-title">Film Workflow</span>
+    <span class="project-subtitle">AI-Assisted Film Production Pipeline · Human-in-the-loop</span>
+    <span class="badge tested">STAGES 01–04</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">11-stage pipeline treating every narrative element as a structured data entity — characters, props, sets, relationships — with a control loop at every stage. Consistency held by structure, not by model memory.</p>
+
+    <div class="section-label">The problem</div>
+    <p>AI tools can generate impressive individual images. What they cannot do — without a system — is maintain a coherent world across hundreds of shots. The same character in different scenes. The same prop in different hands. The same visual logic across different environments.</p>
+    <p><strong>Model memory is unreliable. Prompt repetition is not architecture.</strong> The solution is structure.</p>
+
+    <div class="section-label">The approach</div>
+    <p>Every narrative element becomes a structured data entity, and a control loop at every stage routes changes through human approval before committing to the canonical record.</p>
+
+    <!-- DIAGRAM -->
+    <div class="section-label">Pipeline diagram</div>
+    <div class="diagram">
+      <!-- REPLACE: img/04-film/pipeline-diagram.png -->
+      <img width="842" height="596" src="img/04-film/pipeline-diagram.webp" alt="AI-assisted film production pipeline diagram — 11 stages across 4 phases" loading="lazy">
+    </div>
+
+    <div class="section-label">Phases</div>
+    <div class="pipeline">
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 1 — Source Material</span>
+          <span class="badge tested">TESTED</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">01</span>
+          <span class="step-name">Script ingest</span>
+          <span class="step-desc">parse, normalise, story chronology</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">02</span>
+          <span class="step-name">Scene breakdown</span>
+          <span class="step-desc">entity extraction, IDs, deduplication</span>
+        </div>
+      </div>
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 2 — Canonical Truth</span>
+          <span class="badge tested">TESTED / PARTIAL</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">03</span>
+          <span class="step-name">Entity cards</span>
+          <span class="step-desc">characters, props, sets, vehicles</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">04</span>
+          <span class="step-name">Visual identity lock</span>
+          <span class="step-desc">character sheets, LoRA preparation</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">05</span>
+          <span class="step-name">Continuity ledger</span>
+          <span class="step-desc">state deltas, rule validators</span>
+        </div>
+      </div>
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 3 — Creative Analysis</span>
+          <span class="badge wip">PARTIAL</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">06</span>
+          <span class="step-name">Directorial analysis</span>
+          <span class="step-desc">beats, function, turning points</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">07</span>
+          <span class="step-name">Cinematography</span>
+          <span class="step-desc">light, lens, screen direction</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">08</span>
+          <span class="step-name">Shot list</span>
+          <span class="step-desc">shots linked to entity IDs</span>
+        </div>
+      </div>
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 4 — Generation &amp; Delivery</span>
+          <span class="badge planned">PARTIAL / DESIGNED</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">09</span>
+          <span class="step-name">Storyboard / previz</span>
+          <span class="step-desc">prompts assembled from canonical data</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">10</span>
+          <span class="step-name">Shot generation</span>
+          <span class="step-desc">batch, scoring, human pick</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">11</span>
+          <span class="step-name">Edit &amp; post</span>
+          <span class="step-desc">EDL/XML, sound, colour, master</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-label">Status</div>
+    <ul class="items">
+      <li><strong>Stages 01–04</strong> — running in production</li>
+      <li><strong>Stages 05–07, 09</strong> — in testing</li>
+      <li><strong>Stages 08, 10–11</strong> — designed</li>
+    </ul>
+
+    <div class="highlight">
+      <div class="hl-label">CONTROL LOOP — identical at every stage</div>
+      Agent proposes a diff → validators run (JSON schema, continuity rules, LLM cross-check) → human gate → commit to canon in git. Gate types: P full review · W exceptions only · S sampling · 4 four-eyes on irreversible steps.
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 05. CORPORATE WORKFLOW                                 -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="corporate">
+  <div class="project-header">
+    <span class="project-num">05</span>
+    <span class="project-title">Corporate Workflow</span>
+    <span class="project-subtitle">Script to master — licensed stock, automated timeline, AI inpainting</span>
+    <span class="badge tested">STAGES 01–07</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">12-stage agentic pipeline from brief to master delivery. Four human decision gates. Everything else runs unattended.</p>
+
+    <div class="section-label">The problem</div>
+    <p>Corporate video production requires coordinating many moving parts — voiceover, visuals, graphics, music, editing — even for a short film.</p>
+    <p>Traditionally this takes days of back-and-forth: sourcing images manually, building graphics frame by frame, assembling cuts by hand.</p>
+    <p><strong>We wanted to know: how much of this can run automatically, with a human checking the results at key moments rather than doing every step?</strong></p>
+
+    <div class="section-label">The solution</div>
+    <p>A pipeline that treats video production as a system, not a one-off job.</p>
+    <p>Each element of the production — voiceover, visuals, graphics, music, assembly — is handled by a dedicated stage. The stages connect automatically. A human approves the result at four key decision points and lets the rest run.</p>
+    <p>Because every asset is generated from structured data rather than drawn or edited by hand, the same pipeline can produce the same film in a different language, a different format, or with updated brand data — without starting from scratch.</p>
+
+    <div class="highlight">
+      <div class="hl-label">THE GOAL</div>
+      One production day that becomes a reusable content system.
+    </div>
+
+    <!-- CORPORATE VIDEO EMBED -->
+    <div class="section-label">Production output</div>
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/_J20Sdt3h00?cc_load_policy=0&amp;iv_load_policy=3&amp;rel=0&amp;playsinline=1"
+        title="AI-assisted corporate video pipeline output"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <div class="section-label">How this film was made</div>
+    <p>Starting point: a finished voiceover script. A human voice actor recorded the narration. From there, the pipeline took over.</p>
+    <p>The system read the script and proposed a visual for each segment. It then searched Shutterstock and Freepik automatically, downloaded candidates and presented them for human selection.</p>
+
+    <div class="highlight">
+      <div class="hl-label">NOTABLE AI INTERVENTION — at 0:30</div>
+      There is a hospital room scene. The shot came from licensed stock footage — it had medical equipment that didn't fit the scene. AI inpainting (Kling) removed it. No reshoot. No crew. No location booking.
+    </div>
+
+    <p>Motion graphics were built in After Effects. The system assembled a first rough cut automatically, synced to the voiceover. A human editor reviewed and refined it. Music from stock library.</p>
+
+    <div class="highlight">
+      <div class="hl-label">RESULT</div>
+      A process that previously took several days completed in <strong>4 hours</strong> — with a human checking every key decision.
+    </div>
+
+    <!-- PIPELINE DIAGRAM -->
+    <div class="section-label">Pipeline diagram</div>
+    <div class="diagram">
+      <!-- REPLACE: img/05-corporate/pipeline-diagram.png -->
+      <img width="842" height="596" src="img/05-corporate/pipeline-diagram.webp" alt="AI-assisted corporate video pipeline diagram — 12 stages across 4 phases" loading="lazy">
+    </div>
+
+    <div class="section-label">Phases</div>
+    <div class="pipeline">
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 1 — Script &amp; Voice</span>
+          <span class="badge tested">TESTED</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">01</span>
+          <span class="step-name">Brief &amp; script</span>
+          <span class="step-desc">goal, channels, client sign-off <code>gate</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">02</span>
+          <span class="step-name">Voice synthesis</span>
+          <span class="step-desc">ElevenLabs, per sentence, seeds <code>gate</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">03</span>
+          <span class="step-name">Forced alignment</span>
+          <span class="step-desc">WhisperX, word-level timings <code>json</code></span>
+        </div>
+      </div>
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 2 — Planning Data</span>
+          <span class="badge tested">TESTED</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">04</span>
+          <span class="step-name">Scene plan</span>
+          <span class="step-desc">segments, durations, intent <code>json</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">05</span>
+          <span class="step-name">Stock briefs</span>
+          <span class="step-desc">queries, rights constraints <code>json</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">06</span>
+          <span class="step-name">Graphics manifest</span>
+          <span class="step-desc">template, props, in-points <code>json</code></span>
+        </div>
+      </div>
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 3 — Sourcing &amp; Build</span>
+          <span class="badge tested">TESTED / PARTIAL</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">07</span>
+          <span class="step-name">Stock retrieval</span>
+          <span class="step-desc">Shutterstock + Freepik, API pull <code>gate</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">08</span>
+          <span class="step-name">Motion graphics</span>
+          <span class="step-desc">After Effects / Remotion <code>auto</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">09</span>
+          <span class="step-name">Music &amp; sound</span>
+          <span class="step-desc">Suno or stock <code>auto</code></span>
+        </div>
+      </div>
+
+      <div class="pipeline-phase">
+        <div class="pipeline-phase-header">
+          <span>Phase 4 — Assembly &amp; Delivery</span>
+          <span class="badge wip">PARTIAL</span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">10</span>
+          <span class="step-name">Timeline assembly</span>
+          <span class="step-desc">Resolve API, OTIO — not EDL <code>auto</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">11</span>
+          <span class="step-name">Review &amp; versions</span>
+          <span class="step-desc">timecoded notes, subtitles <code>gate</code></span>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">12</span>
+          <span class="step-name">Master &amp; deliver</span>
+          <span class="step-desc">loudness, formats, archive <code>auto</code></span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-label">Tested in production</div>
+    <ul class="items">
+      <li><strong>Voice</strong> — human talent (ElevenLabs as drop-in replacement)</li>
+      <li><strong>Forced alignment</strong> — WhisperX, word-level timings as JSON</li>
+      <li><strong>Stock sourcing</strong> — Shutterstock + Freepik, automated search, human selection</li>
+      <li><strong>Motion graphics</strong> — After Effects</li>
+      <li><strong>First assembly</strong> — automatic</li>
+      <li><strong>Editorial polish</strong> — human editor</li>
+      <li><strong>Music</strong> — stock library</li>
+    </ul>
+
+    <div class="section-label">Planned features (not in this production)</div>
+    <ul class="items">
+      <li>Word-level timings from forced alignment as animation frames</li>
+      <li>Text as data, never baked into the frame — charts rebuild from client data</li>
+      <li>Remotion: same props driving all formats without redrawing</li>
+    </ul>
+
+    <div class="section-label">Status</div>
+    <ul class="items">
+      <li><strong>Stages 01–07</strong> — implemented and tested</li>
+      <li><strong>Planned features</strong> — in development</li>
+    </ul>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">WhisperX</span>
+      <span class="tool-tag">Shutterstock API</span>
+      <span class="tool-tag">Freepik</span>
+      <span class="tool-tag">After Effects</span>
+      <span class="tool-tag">Kling</span>
+      <span class="tool-tag">DaVinci Resolve</span>
+      <span class="tool-tag">OTIO</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 06. APS                                                -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="aps">
+  <div class="project-header">
+    <span class="project-num">06</span>
+    <span class="project-title">APS — AI Production Standard</span>
+    <span class="project-subtitle">Open draft standard for AI documentation in film production</span>
+    <span class="badge draft">DRAFT FOR REVIEW</span>
+  </div>
+  <div class="aps-body">
+
+    <p>An open draft standard for documenting AI use in audiovisual production — authored by Marcin Marczyk based on hands-on experience in film and TV production.</p>
+
+    <p>Addresses chain of title, IP rights verification, content classification, and distribution readiness for streaming platforms, broadcasters and festivals.</p>
+
+    <p>Drafted and structured with Claude as a writing tool. Submitted to PISF, MKiDN, SFP, Polish Filmmakers Union and Polish National Film School. Currently in public review.</p>
+
+    <ul class="items" style="margin-top:16px">
+      <li>Chain of title documentation</li>
+      <li>IP rights verification per tool</li>
+      <li>Content classification: human / hybrid / fully AI-generated</li>
+      <li>Tool registry with dated ToS snapshots</li>
+      <li>Distribution readiness checklist</li>
+    </ul>
+
+    <a class="aps-link" href="https://github.com/ai4-film/aps-standard" target="_blank">
+      → github.com/ai4-film/aps-standard
+    </a>
+
+    <p style="margin-top:12px; font-size:12px;">Apache 2.0 — free to use.</p>
+
+  </div>
+</section>
+
+<!-- DISCLOSURE -->
+<div class="disclosure">
+  <strong>Disclosure</strong> — All work produced by Marcin Marczyk / Udyssey Creative Technologies.
+  AI tools used in this portfolio: Nano Banana Pro (Gemini Flash) · Flux · ElevenLabs v3 · Runway · Kling · Freepik · Magnific · VEED fabric · Suno · WhisperX · VEO 3.1 · After Effects · DaVinci Resolve · Claude (editing, assembly, script development).
+  ✦ All generated images and audio were produced with AI assistance.
+</div>
+
+</main>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- LIGHTBOX — click any gallery or diagram image to open  -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lightbox-stage" id="lightboxStage">
+    <img id="lightboxImg" alt="">
+  </div>
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close viewer">&times;</button>
+  <div class="lightbox-bar">
+    <span class="lightbox-caption" id="lightboxCaption"></span>
+    <span class="lightbox-hint">click image to toggle actual size &middot; esc to close</span>
+  </div>
+</div>
+
+<script>
+(function () {
+  var box     = document.getElementById('lightbox');
+  var stage   = document.getElementById('lightboxStage');
+  var img     = document.getElementById('lightboxImg');
+  var caption = document.getElementById('lightboxCaption');
+  var closeBtn= document.getElementById('lightboxClose');
+  var lastFocus = null;
+
+  var SELECTOR = '.gallery img, .diagram img';
+
+  document.querySelectorAll(SELECTOR).forEach(function (el) {
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'button');
+    el.addEventListener('click', function () { open(el); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(el); }
+    });
+  });
+
+  function open (el) {
+    lastFocus = el;
+    img.src = el.currentSrc || el.src;
+    img.alt = el.alt || '';
+    caption.textContent = el.alt || '';
+    stage.classList.remove('actual');
+    stage.scrollTop = 0; stage.scrollLeft = 0;
+    box.setAttribute('open', '');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+
+  function close () {
+    box.removeAttribute('open');
+    img.removeAttribute('src');
+    document.body.style.overflow = '';
+    if (lastFocus) { lastFocus.focus(); lastFocus = null; }
+  }
+
+  // click the image to toggle fit <-> actual size; click the backdrop to close
+  stage.addEventListener('click', function (e) {
+    if (e.target === img) {
+      var wasActual = stage.classList.toggle('actual');
+      if (wasActual) {
+        // centre the view on the point that was clicked
+        stage.scrollLeft = (stage.scrollWidth  - stage.clientWidth)  / 2;
+        stage.scrollTop  = (stage.scrollHeight - stage.clientHeight) / 2;
+      }
+    } else {
+      close();
+    }
+  });
+
+  closeBtn.addEventListener('click', close);
+
+  document.addEventListener('keydown', function (e) {
+    if (!box.hasAttribute('open')) return;
+    if (e.key === 'Escape') close();
+    // keep focus inside the dialog
+    if (e.key === 'Tab') { e.preventDefault(); closeBtn.focus(); }
+  });
+})();
+</script>
+
+</body>
+</html>
