@@ -71,7 +71,7 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 70px; }
 
 body {
   background: var(--bg);
@@ -96,11 +96,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  background: rgba(13,17,23,0.95);
-  backdrop-filter: blur(8px);
-  z-index: 100;
+  background: var(--bg);
 }
 
 .header-prompt {
@@ -128,14 +124,23 @@ header {
 
 /* ── NAV ── */
 nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   padding: 12px 24px;
   border-bottom: 1px solid var(--border);
   display: flex;
   gap: 4px;
-  flex-wrap: wrap;
-  background: var(--bg);
+  /* one row that scrolls sideways — wrapping would make the pinned bar
+     three rows tall on a phone and eat the screen */
+  flex-wrap: nowrap;
   overflow-x: auto;
+  scrollbar-width: none;
+  background: rgba(13,17,23,0.92);
+  backdrop-filter: blur(8px);
 }
+
+nav::-webkit-scrollbar { display: none; }
 
 .nav-link {
   color: var(--text-muted);
