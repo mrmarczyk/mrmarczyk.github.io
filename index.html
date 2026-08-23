@@ -222,19 +222,18 @@ main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
 .hero-links a { font-size: 12px; color: var(--blue); }
 
 /* ── CREDENTIALS BAR ──
-   The only pre-AI track record on the page. One line, dim, never the focus. */
+   The only pre-AI track record on the page. Dim, never the focus.
+   Plain inline text, not flex: an entry may break across the line, which packs
+   the whole list into three lines instead of four on a 380px screen. */
 .credentials {
   max-width: 960px;
   margin: 0 auto;
   padding: 8px 24px;
   font-size: 11px;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--text-faint);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 10px;
 }
-.credentials span + span::before { content: '· '; }
+.credentials span + span::before { content: ' · '; }
 
 /* invisible landmark that keeps an old #hash alive after a rename */
 .anchor-alias { display: block; height: 0; overflow: hidden; }
@@ -647,7 +646,7 @@ code {
   .pipeline-step { flex-direction: column; gap: 4px; }
   .step-name { min-width: auto; }
 
-  .credentials { padding: 8px 16px; font-size: 10px; gap: 1px 8px; }
+  .credentials { padding: 8px 16px; font-size: 10px; }
   header { padding: 12px 16px; flex-wrap: wrap; gap: 8px 12px; }
   .header-links { gap: 12px; flex-wrap: wrap; }
   nav { padding: 10px 16px; }
@@ -701,7 +700,7 @@ code {
   <a class="nav-link" href="#fashion">06-fashion</a>
 </nav>
 
-<!-- CREDENTIALS BAR — the only non-AI track record on the page, kept to one line -->
+<!-- CREDENTIALS BAR — the only non-AI track record on the page, kept short and dim -->
 <div class="credentials">
   <span>Venice 2010 (service prod., dir. Douglas Gordon)</span>
   <span>Orzeł nomination (Polish Film Award)</span>
@@ -874,7 +873,7 @@ code {
   <div class="project-body">
 
     <p class="cross-link"><strong>The system behind Witness.</strong></p>
-    <p class="lead">11-stage pipeline treating every narrative element as a structured data entity — characters, props, sets, relationships — with a control loop at every stage. Consistency held by structure, not by model memory.</p>
+    <p class="lead">11-stage pipeline treating every narrative element as a structured data entity — characters, props, sets, relationships — with a control loop at every stage.</p>
 
     <div class="section-label">The problem</div>
     <p>AI tools can generate impressive individual images. What they cannot do — without a system — is maintain a coherent world across hundreds of shots. The same character in different scenes. The same prop in different hands. The same visual logic across different environments.</p>
