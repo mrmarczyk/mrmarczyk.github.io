@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>mrmarczyk / workstation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://i.ytimg.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 
 <!--
@@ -34,15 +35,27 @@
     Diagrams and screenshots with text (lossless, keeps type crisp):
       ffmpeg -i SOURCE.png -c:v libwebp -lossless 1 TARGET.webp
 
+  SECTION ORDER (nav, numbers and anchors must agree):
+    01 #conversation  · opens with a story, uses the ElevenLabs product
+    02 #witness       · visible proof of consistency, three scenes, one face
+    03 #film-workflow · the system Witness is stage 04 of
+    04 #video-pipeline· second system, other domain, same thinking
+    05 #aps           · documentation and standardisation
+    06 #fashion       · prettiest, least distinguishing
+    #corporate is kept as an alias anchor for #video-pipeline — old links
+    still land. Image folders keep their original names on purpose.
+
   TO ADD A NEW PROJECT:
     1. Copy a <section class="project"> block
-    2. Change data-id, the number, title, status badge
+    2. Change the id, the number, title, status badge
     3. Add your content inside .project-body
     4. Add a <a class="nav-link"> in the <nav> block
 
   TO UPDATE A VIDEO LINK:
-    Replace the YouTube ID in the iframe src
-    https://www.youtube.com/embed/YOUR_ID_HERE
+    Replace the YouTube ID in the facade's data-yt AND in the thumbnail URL:
+      <button class="yt-facade" data-yt="YOUR_ID" ...>
+        <img src="https://i.ytimg.com/vi/YOUR_ID/hqdefault.jpg" ...>
+    The iframe is created by script on click — no iframe in the markup.
 
   STATUS BADGES:
     <span class="badge tested">TESTED</span>
@@ -196,8 +209,35 @@ main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
   color: var(--text-muted);
 }
 
+/* the page's thesis, directly under the job title */
+.hero-claim {
+  color: var(--text);
+  font-size: 14px;
+  border-left: 2px solid var(--green);
+  padding-left: 12px;
+  margin-bottom: 20px;
+}
+
 .hero-links { display: flex; gap: 16px; }
 .hero-links a { font-size: 12px; color: var(--blue); }
+
+/* ── CREDENTIALS BAR ──
+   The only pre-AI track record on the page. One line, dim, never the focus. */
+.credentials {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 8px 24px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text-faint);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+}
+.credentials span + span::before { content: '· '; }
+
+/* invisible landmark that keeps an old #hash alive after a rename */
+.anchor-alias { display: block; height: 0; overflow: hidden; }
 
 /* ── PROJECT SECTION ── */
 .project {
@@ -278,6 +318,10 @@ main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
 p { color: var(--text-muted); margin-bottom: 12px; }
 p strong { color: var(--text); font-weight: 500; }
 p:last-child { margin-bottom: 0; }
+
+/* one-line bridge between two sections */
+.cross-link { font-size: 13px; margin-bottom: 16px; }
+.cross-link strong { color: var(--text); }
 
 .lead {
   color: var(--text);
@@ -391,6 +435,40 @@ p:last-child { margin-bottom: 0; }
   width: 100%; height: 100%;
   border: none;
 }
+
+/* ── YOUTUBE FACADE ──
+   Thumbnail + play button; the iframe is built on click. Keeps three third-party
+   players off the critical path — nothing above the fold waits on youtube.com. */
+.yt-facade {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  padding: 0; border: none;
+  background: #000;
+  cursor: pointer;
+}
+.yt-facade img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+.yt-facade:hover img, .yt-facade:focus-visible img { opacity: 1; }
+
+.yt-play {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 62px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  background: rgba(13,17,23,0.82);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1;
+}
+.yt-facade:hover .yt-play { background: rgba(63,185,80,0.85); color: #0d1117; }
 
 .video-placeholder {
   position: relative;
@@ -569,6 +647,7 @@ code {
   .pipeline-step { flex-direction: column; gap: 4px; }
   .step-name { min-width: auto; }
 
+  .credentials { padding: 8px 16px; font-size: 10px; gap: 1px 8px; }
   header { padding: 12px 16px; flex-wrap: wrap; gap: 8px 12px; }
   .header-links { gap: 12px; flex-wrap: wrap; }
   nav { padding: 10px 16px; }
@@ -614,22 +693,32 @@ code {
 
 <!-- NAV -->
 <nav aria-label="Projects">
-  <a class="nav-link" href="#witness">01-witness</a>
-  <a class="nav-link" href="#fashion">02-fashion-pipeline</a>
-  <a class="nav-link" href="#conversation">03-conversation</a>
-  <a class="nav-link" href="#film-workflow">04-film-workflow</a>
-  <a class="nav-link" href="#corporate">05-corporate-workflow</a>
-  <a class="nav-link" href="#aps">06-aps</a>
+  <a class="nav-link" href="#conversation">01-conversation</a>
+  <a class="nav-link" href="#witness">02-witness</a>
+  <a class="nav-link" href="#film-workflow">03-film-workflow</a>
+  <a class="nav-link" href="#video-pipeline">04-video-pipeline</a>
+  <a class="nav-link" href="#aps">05-aps</a>
+  <a class="nav-link" href="#fashion">06-fashion</a>
 </nav>
+
+<!-- CREDENTIALS BAR — the only non-AI track record on the page, kept to one line -->
+<div class="credentials">
+  <span>Venice 2010 (service prod., dir. Douglas Gordon)</span>
+  <span>Orzeł nomination (Polish Film Award)</span>
+  <span>170 TVP broadcasts</span>
+  <span>15,000+ exhibition visitors</span>
+  <span>ElevenLabs Impact Program</span>
+</div>
 
 <main>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-title">Marcin Marczyk</div>
-  <div class="hero-sub">AI Creative Producer · Production Coordinator · Udyssey Creative Technologies · Warsaw</div>
+  <div class="hero-sub">AI Creative Producer · Udyssey Creative Technologies · Warsaw</div>
+  <div class="hero-claim">Consistency held by structure, not by model memory.</div>
   <div class="hero-tags">
-    <span class="tag">18 years in film & TV production</span>
+    <span class="tag">nearly 20 years in film & TV production</span>
     <span class="tag">ElevenLabs Impact Program</span>
     <span class="tag">AI workflow design</span>
     <span class="tag">agentic pipelines</span>
@@ -642,11 +731,73 @@ code {
 </div>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 01. WITNESS                                            -->
+<!-- 01. CONVERSATION                                -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="conversation">
+  <div class="project-header">
+    <span class="project-num">01</span>
+    <span class="project-title">Conversation — Nie odbyła się (It Never Happened)</span>
+    <span class="project-subtitle">AI-Generated Dialogue Series · Work in Progress</span>
+    <span class="badge wip">WIP · TOOL TEST</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">A conversation that never happened. Two versions of the same person — separated by twenty-five years — talk about what artificial intelligence has done to the film industry they both work in.</p>
+
+    <!-- VIDEO — replace YouTube ID when episode 01 is ready -->
+    <div class="section-label">Episode 03 — preview</div>
+    <div class="video-wrap">
+      <button class="yt-facade" type="button" data-yt="Vlmf-w6uxxg" data-title="Conversation — Nie odbyła się, episode 03 preview" aria-label="Play episode 03 preview">
+        <img src="https://i.ytimg.com/vi/Vlmf-w6uxxg/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/Vlmf-w6uxxg/hqdefault.jpg'" alt="" width="1280" height="720" loading="lazy" decoding="async">
+        <span class="yt-play" aria-hidden="true">&#9654;</span>
+      </button>
+    </div>
+    <p class="gallery-caption">Work in progress. Episode 03 available as a preview. 13 episodes fully scripted.</p>
+
+    <div class="highlight">
+      <div class="hl-label">WHAT IS BEING TESTED HERE</div>
+      The Polish version is cut. I am tuning the delivery away from a theatrical read — v3 tends to perform dialogue rather than speak it, and the older character has to sound tired, not dramatic. An English version is in progress, to find out how much of a character survives a change of language. This is a test, not a finished cut.
+    </div>
+
+    <div class="section-label">The concept</div>
+    <p>One is 25 years old. The year is 2001. Film is still shot on tape. Crews are large. Budgets are fixed. Every shooting day costs a fortune.</p>
+    <p>One is 50 years old. The year is 2026. He sits alone in front of a screen. He has seen what happened in between.</p>
+    <p>Neither character is named. Neither character promotes a product. This is industry testimony, not advertising.</p>
+
+    <div class="section-label">Episode themes</div>
+    <ul class="items">
+      <li>The disappearance of production crews</li>
+      <li><strong>Without chain of title, the content is worth zero</strong> — no distributor, no insurer, no deal</li>
+      <li>Collapse of the apprenticeship model</li>
+      <li>The impossibility of archiving AI footage</li>
+      <li>Who stops the process when nothing costs money</li>
+      <li>The flooding of festival selections by zero-cost content</li>
+    </ul>
+
+    <div class="section-label">Pipeline</div>
+    <ul class="items">
+      <li><strong>Voice</strong> — ElevenLabs v3, Voice Design. Two distinct voices, same person, twenty-five years apart: age, register, rhythm, hesitation. The younger voice carries an enthusiasm the older one has lost.</li>
+      <li><strong>Image</strong> — Nano Banana Pro with personal likeness reference. Visual Identity Lock methodology applied.</li>
+      <li><strong>Rule</strong> — The older character never has clean answers about industry-wide problems. Only about his own practice.</li>
+    </ul>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">ElevenLabs v3</span>
+      <span class="tool-tag">Nano Banana Pro</span>
+      <span class="tool-tag">VEED fabric</span>
+      <span class="tool-tag">DaVinci Resolve</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 02. WITNESS                                     -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="witness">
   <div class="project-header">
-    <span class="project-num">01</span>
+    <span class="project-num">02</span>
     <span class="project-title">Witness — Visual Identity Lock</span>
     <span class="project-subtitle">AI-Assisted Film Production Pipeline · Stage 04</span>
     <span class="badge tested">TESTED</span>
@@ -654,6 +805,7 @@ code {
   <div class="project-body">
 
     <p class="lead">Consistency held by structure, not by model memory.</p>
+    <p class="cross-link"><a href="#film-workflow">Stage 04 of the film production pipeline below.</a></p>
 
     <div class="section-label">The problem</div>
     <p>Generative AI loses characters. Generate a face once — it looks right. Generate it again with different lighting, different angle — and you have a different person. Most practitioners hope the model remembers. It doesn't.</p>
@@ -710,135 +862,18 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 02. FASHION PIPELINE                                   -->
-<!-- ══════════════════════════════════════════════════════ -->
-<section class="project" id="fashion">
-  <div class="project-header">
-    <span class="project-num">02</span>
-    <span class="project-title">Fashion Pipeline</span>
-    <span class="project-subtitle">Generated model, real product, no shoot day</span>
-    <span class="badge tested">TESTED</span>
-  </div>
-  <div class="project-body">
-
-    <p class="lead">Brand sends a product photo. Pipeline returns a finished campaign film. No model booking. No studio. No shoot day.</p>
-
-    <!-- VIDEO — replace YouTube ID when ready -->
-    <div class="section-label">Output film</div>
-    <div class="video-wrap-vertical">
-      <iframe
-        src="https://www.youtube.com/embed/RaAqzHmkCfo?cc_load_policy=0&amp;iv_load_policy=3&amp;rel=0&amp;playsinline=1"
-        title="Fashion pipeline — campaign film"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy">
-      </iframe>
-    </div>
-    <p class="gallery-caption">YouTube Shorts · vertical 9:16 · generated model wearing a real product</p>
-
-    <div class="section-label">Workflow screenshot</div>
-    <!-- REPLACE: img/02-fashion/screenshot-workflow.png -->
-    <div class="gallery gallery-1">
-      <img width="1400" height="894" src="img/02-fashion/screenshot-workflow.webp" alt="Freepik / Magnific workflow screenshot" loading="lazy">
-    </div>
-
-    <div class="section-label">The pipeline</div>
-    <ul class="items">
-      <li><strong>Model generated</strong> — Nano Banana Pro, personal character brief</li>
-      <li><strong>Product sourced</strong> — real sweater from e-commerce store (standard brand assets)</li>
-      <li><strong>Model dressed</strong> — Freepik / Magnific AI editing environment</li>
-      <li><strong>Identity maintained</strong> — same face, same fit, consistent lighting across frames</li>
-      <li><strong>Animation</strong> — static images to motion</li>
-      <li><strong>Edit</strong> — automatic assembly (Claude)</li>
-      <li><strong>Music</strong> — Suno</li>
-    </ul>
-
-    <div class="section-label">Tools</div>
-    <div class="tools-row">
-      <span class="tool-tag">Nano Banana Pro</span>
-      <span class="tool-tag">Freepik</span>
-      <span class="tool-tag">Magnific</span>
-      <span class="tool-tag">Runway / Kling</span>
-      <span class="tool-tag">Claude</span>
-      <span class="tool-tag">Suno</span>
-      <span class="tool-tag">DaVinci Resolve</span>
-    </div>
-
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!-- 03. CONVERSATION                                       -->
-<!-- ══════════════════════════════════════════════════════ -->
-<section class="project" id="conversation">
-  <div class="project-header">
-    <span class="project-num">03</span>
-    <span class="project-title">Conversation — Nie odbyła się (It Never Happened)</span>
-    <span class="project-subtitle">AI-Generated Dialogue Series · Work in Progress</span>
-    <span class="badge wip">WIP</span>
-  </div>
-  <div class="project-body">
-
-    <p class="lead">A conversation that never happened. Two versions of the same person — separated by twenty-five years — talk about what artificial intelligence has done to the film industry they both work in.</p>
-
-    <!-- VIDEO — replace YouTube ID when episode 01 is ready -->
-    <div class="section-label">Episode 03 — preview</div>
-    <div class="video-wrap">
-      <iframe
-        src="https://www.youtube.com/embed/Vlmf-w6uxxg?cc_load_policy=0&amp;iv_load_policy=3&amp;rel=0&amp;playsinline=1"
-        title="Conversation — Nie odbyła się, episode 03 preview"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy">
-      </iframe>
-    </div>
-    <p class="gallery-caption">Work in progress. Episode 03 available as a preview. 13 episodes fully scripted.</p>
-
-    <div class="section-label">The concept</div>
-    <p>One is 25 years old. The year is 2001. Film is still shot on tape. Crews are large. Budgets are fixed. Every shooting day costs a fortune.</p>
-    <p>One is 50 years old. The year is 2026. He sits alone in front of a screen. He has seen what happened in between.</p>
-    <p>Neither character is named. Neither character promotes a product. This is industry testimony, not advertising.</p>
-
-    <div class="section-label">Episode themes</div>
-    <ul class="items">
-      <li>The disappearance of production crews</li>
-      <li><strong>Without chain of title, the content is worth zero</strong> — no distributor, no insurer, no deal</li>
-      <li>Collapse of the apprenticeship model</li>
-      <li>The impossibility of archiving AI footage</li>
-      <li>Who stops the process when nothing costs money</li>
-      <li>The flooding of festival selections by zero-cost content</li>
-    </ul>
-
-    <div class="section-label">Pipeline</div>
-    <ul class="items">
-      <li><strong>Voice</strong> — ElevenLabs v3, Voice Design. Two distinct voices, same person, twenty-five years apart: age, register, rhythm, hesitation. The younger voice carries an enthusiasm the older one has lost.</li>
-      <li><strong>Image</strong> — Nano Banana Pro with personal likeness reference. Visual Identity Lock methodology applied.</li>
-      <li><strong>Rule</strong> — The older character never has clean answers about industry-wide problems. Only about his own practice.</li>
-    </ul>
-
-    <div class="section-label">Tools</div>
-    <div class="tools-row">
-      <span class="tool-tag">ElevenLabs v3</span>
-      <span class="tool-tag">Nano Banana Pro</span>
-      <span class="tool-tag">VEED fabric</span>
-      <span class="tool-tag">DaVinci Resolve</span>
-    </div>
-
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!-- 04. FILM WORKFLOW                                      -->
+<!-- 03. FILM WORKFLOW                               -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="film-workflow">
   <div class="project-header">
-    <span class="project-num">04</span>
+    <span class="project-num">03</span>
     <span class="project-title">Film Workflow</span>
     <span class="project-subtitle">AI-Assisted Film Production Pipeline · Human-in-the-loop</span>
     <span class="badge tested">STAGES 01–04</span>
   </div>
   <div class="project-body">
 
+    <p class="cross-link"><strong>The system behind Witness.</strong></p>
     <p class="lead">11-stage pipeline treating every narrative element as a structured data entity — characters, props, sets, relationships — with a control loop at every stage. Consistency held by structure, not by model memory.</p>
 
     <div class="section-label">The problem</div>
@@ -854,6 +889,7 @@ code {
       <!-- REPLACE: img/04-film/pipeline-diagram.png -->
       <img width="842" height="596" src="img/04-film/pipeline-diagram.webp" alt="AI-assisted film production pipeline diagram — 11 stages across 4 phases" loading="lazy">
     </div>
+    <p class="gallery-caption">Tap the diagram to open it full size.</p>
 
     <div class="section-label">Phases</div>
     <div class="pipeline">
@@ -959,12 +995,13 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 05. CORPORATE WORKFLOW                                 -->
+<!-- 04. VIDEO PIPELINE                              -->
 <!-- ══════════════════════════════════════════════════════ -->
-<section class="project" id="corporate">
+<span class="anchor-alias" id="corporate"></span>
+<section class="project" id="video-pipeline">
   <div class="project-header">
-    <span class="project-num">05</span>
-    <span class="project-title">Corporate Workflow</span>
+    <span class="project-num">04</span>
+    <span class="project-title">Video Pipeline</span>
     <span class="project-subtitle">Script to master — licensed stock, automated timeline, AI inpainting</span>
     <span class="badge tested">STAGES 01–07</span>
   </div>
@@ -980,7 +1017,7 @@ code {
     <div class="section-label">The solution</div>
     <p>A pipeline that treats video production as a system, not a one-off job.</p>
     <p>Each element of the production — voiceover, visuals, graphics, music, assembly — is handled by a dedicated stage. The stages connect automatically. A human approves the result at four key decision points and lets the rest run.</p>
-    <p>Because every asset is generated from structured data rather than drawn or edited by hand, the same pipeline can produce the same film in a different language, a different format, or with updated brand data — without starting from scratch.</p>
+    <p>Because every asset is generated from structured data, the same pipeline reproduces the film in another language or format without starting over.</p>
 
     <div class="highlight">
       <div class="hl-label">THE GOAL</div>
@@ -990,13 +1027,10 @@ code {
     <!-- CORPORATE VIDEO EMBED -->
     <div class="section-label">Production output</div>
     <div class="video-wrap">
-      <iframe
-        src="https://www.youtube.com/embed/_J20Sdt3h00?cc_load_policy=0&amp;iv_load_policy=3&amp;rel=0&amp;playsinline=1"
-        title="AI-assisted corporate video pipeline output"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy">
-      </iframe>
+      <button class="yt-facade" type="button" data-yt="_J20Sdt3h00" data-title="AI-assisted corporate video pipeline output" aria-label="Play pipeline output film">
+        <img src="https://i.ytimg.com/vi/_J20Sdt3h00/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/_J20Sdt3h00/hqdefault.jpg'" alt="" width="1280" height="720" loading="lazy" decoding="async">
+        <span class="yt-play" aria-hidden="true">&#9654;</span>
+      </button>
     </div>
 
     <div class="section-label">How this film was made</div>
@@ -1021,6 +1055,7 @@ code {
       <!-- REPLACE: img/05-corporate/pipeline-diagram.png -->
       <img width="842" height="596" src="img/05-corporate/pipeline-diagram.webp" alt="AI-assisted corporate video pipeline diagram — 12 stages across 4 phases" loading="lazy">
     </div>
+    <p class="gallery-caption">Tap the diagram to open it full size.</p>
 
     <div class="section-label">Phases</div>
     <div class="pipeline">
@@ -1154,11 +1189,11 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 06. APS                                                -->
+<!-- 05. APS                                         -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="aps">
   <div class="project-header">
-    <span class="project-num">06</span>
+    <span class="project-num">05</span>
     <span class="project-title">APS — AI Production Standard</span>
     <span class="project-subtitle">Open draft standard for AI documentation in film production</span>
     <span class="badge draft">DRAFT FOR REVIEW</span>
@@ -1187,6 +1222,66 @@ code {
 
   </div>
 </section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 06. FASHION                                     -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="fashion">
+  <div class="project-header">
+    <span class="project-num">06</span>
+    <span class="project-title">Fashion Pipeline</span>
+    <span class="project-subtitle">Generated model, real product, no shoot day</span>
+    <span class="badge tested">TESTED</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">Brand sends a product photo. Pipeline returns a finished campaign film. No model booking. No studio. No shoot day.</p>
+
+    <!-- VIDEO — replace YouTube ID when ready -->
+    <div class="section-label">Output film</div>
+    <div class="video-wrap-vertical">
+      <button class="yt-facade" type="button" data-yt="RaAqzHmkCfo" data-title="Fashion pipeline — campaign film" aria-label="Play campaign film">
+        <img src="https://i.ytimg.com/vi/RaAqzHmkCfo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/RaAqzHmkCfo/hqdefault.jpg'" alt="" width="1280" height="720" loading="lazy" decoding="async">
+        <span class="yt-play" aria-hidden="true">&#9654;</span>
+      </button>
+    </div>
+    <p class="gallery-caption">YouTube Shorts · vertical 9:16 · generated model wearing a real product</p>
+
+    <div class="section-label">The pipeline</div>
+    <ul class="items">
+      <li><strong>Model generated</strong> — Nano Banana Pro, personal character brief</li>
+      <li><strong>Product sourced</strong> — real sweater from e-commerce store (standard brand assets)</li>
+      <li><strong>Model dressed</strong> — Freepik / Magnific AI editing environment</li>
+      <li><strong>Identity maintained</strong> — same face, same fit, consistent lighting across frames</li>
+      <li><strong>Animation</strong> — static images to motion</li>
+      <li><strong>Edit</strong> — automatic assembly (Claude)</li>
+      <li><strong>Music</strong> — Suno</li>
+    </ul>
+
+    <div class="section-label">Workflow screenshot</div>
+    <!-- REPLACE: img/02-fashion/screenshot-workflow.png -->
+    <div class="gallery gallery-1">
+      <img width="1400" height="894" src="img/02-fashion/screenshot-workflow.webp" alt="Freepik / Magnific workflow screenshot" loading="lazy">
+    </div>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">Nano Banana Pro</span>
+      <span class="tool-tag">Freepik</span>
+      <span class="tool-tag">Magnific</span>
+      <span class="tool-tag">Runway / Kling</span>
+      <span class="tool-tag">Claude</span>
+      <span class="tool-tag">Suno</span>
+      <span class="tool-tag">DaVinci Resolve</span>
+    </div>
+
+  </div>
+</section>
+
+
+
+
+
 
 <!-- DISCLOSURE -->
 <div class="disclosure">
@@ -1271,6 +1366,22 @@ code {
     if (e.key === 'Escape') close();
     // keep focus inside the dialog
     if (e.key === 'Tab') { e.preventDefault(); closeBtn.focus(); }
+  });
+})();
+
+// YouTube facade — build the player only when someone actually asks for it
+(function () {
+  document.querySelectorAll('.yt-facade').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var frame = document.createElement('iframe');
+      frame.src = 'https://www.youtube.com/embed/' + btn.dataset.yt +
+                  '?autoplay=1&cc_load_policy=0&iv_load_policy=3&rel=0&playsinline=1';
+      frame.title = btn.dataset.title || '';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      frame.allowFullscreen = true;
+      btn.replaceWith(frame);
+      frame.focus();
+    });
   });
 })();
 </script>
