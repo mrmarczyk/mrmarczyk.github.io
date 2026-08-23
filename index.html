@@ -80,7 +80,13 @@
   --amber: #d29922;
   --red: #f85149;
   --font: 'JetBrains Mono', 'Courier New', monospace;
+  /* horizontal gutter of the 960px content column — main and the
+     credentials bar must never declare this separately, or they drift */
+  --gutter: 24px;
 }
+
+@media (max-width: 900px) { :root { --gutter: 20px; } }
+@media (max-width: 640px) { :root { --gutter: 16px; } }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -175,7 +181,7 @@ nav::-webkit-scrollbar { display: none; }
 .nav-link::before { content: '$ '; color: var(--green-dim); }
 
 /* ── MAIN LAYOUT ── */
-main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
+main { max-width: 960px; margin: 0 auto; padding: 48px var(--gutter) 96px; }
 
 /* ── HERO ── */
 .hero {
@@ -228,10 +234,12 @@ main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
 .credentials {
   max-width: 960px;
   margin: 0 auto;
-  padding: 8px 24px;
+  padding: 8px var(--gutter);
   font-size: 11px;
   line-height: 1.55;
   color: var(--text-faint);
+  /* a single long entry must wrap rather than push the bar past the gutter */
+  overflow-wrap: anywhere;
 }
 .credentials span + span::before { content: ' · '; }
 
@@ -632,7 +640,7 @@ code {
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  main { padding: 32px 20px 72px; }
+  main { padding: 32px var(--gutter) 72px; }
   .step-name { min-width: 140px; }
 }
 
@@ -646,12 +654,12 @@ code {
   .pipeline-step { flex-direction: column; gap: 4px; }
   .step-name { min-width: auto; }
 
-  .credentials { padding: 8px 16px; font-size: 10px; }
+  .credentials { font-size: 10px; }
   header { padding: 12px 16px; flex-wrap: wrap; gap: 8px 12px; }
   .header-links { gap: 12px; flex-wrap: wrap; }
   nav { padding: 10px 16px; }
 
-  main { padding: 24px 16px 64px; }
+  main { padding: 24px var(--gutter) 64px; }
   .hero { padding: 20px; }
   .hero-title { font-size: 19px; }
 
