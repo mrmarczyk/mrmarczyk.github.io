@@ -342,6 +342,31 @@ p:last-child { margin-bottom: 0; }
   margin-top: 4px;
 }
 
+/* ── LIVE DEMO CARD ── */
+.demo-link {
+  display: block;
+  position: relative;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.demo-link:hover { border-color: var(--green-dim); text-decoration: none; }
+
+.demo-link img { display: block; width: 100%; height: auto; }
+
+.demo-open {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 8px 12px;
+  background: rgba(13,17,23,0.88);
+  border-top: 1px solid var(--border);
+  color: var(--green);
+  font-size: 12px;
+}
+
 /* ── PIPELINE STEPS ── */
 .pipeline { margin: 16px 0; }
 
@@ -682,7 +707,8 @@ code {
   <a class="nav-link" href="#film-workflow">03-film-workflow</a>
   <a class="nav-link" href="#video-pipeline">04-video-pipeline</a>
   <a class="nav-link" href="#aps">05-aps</a>
-  <a class="nav-link" href="#fashion">06-fashion</a>
+  <a class="nav-link" href="#brightside">06-brightside</a>
+  <a class="nav-link" href="#fashion">07-fashion</a>
 </nav>
 
 <main>
@@ -1199,11 +1225,64 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 06. FASHION                                     -->
+<!-- 06. BRIGHTSIDE CROSSING                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="brightside">
+  <div class="project-header">
+    <span class="project-num">06</span>
+    <span class="project-title">Brightside Crossing</span>
+    <span class="project-subtitle">Scroll-driven narrative prototype · public domain source text</span>
+    <span class="badge wip">PROTOTYPE · LIVE</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">A short story you cross rather than read. Scroll is the only control: the sky heats from night to white, an expedition log prints itself onto a CRT, and at perihelion the signal cuts out.</p>
+
+    <a class="demo-link" href="https://mrmarczyk.github.io/brightside/" target="_blank" rel="noopener">
+      <img src="img/07-brightside/crossing.webp" width="1100" height="688" alt="Brightside Crossing prototype — an expedition log printing onto a CRT under a swollen sun" loading="lazy" decoding="async">
+      <span class="demo-open">→ Open the live prototype — click, then scroll</span>
+    </a>
+    <p class="gallery-caption">Captured mid-crossing, day 09. Sound is on by default and follows the scroll position.</p>
+
+    <div class="section-label">The source</div>
+    <p>An adaptation of <em>Brightside Crossing</em> by Alan E. Nourse, first published in <em>Galaxy Science Fiction</em>, January 1956. Four men set out to cross the sunward face of Mercury at perihelion; one came back. The story is in the public domain and every line in the expedition log is quoted from that edition.</p>
+
+    <div class="section-label">How it works</div>
+    <ul class="items">
+      <li><strong>Scroll is the clock</strong> — a single scroll position drives sky colour, sun size, haze, log entries and audio. No timeline, no autoplay, nothing running on its own.</li>
+      <li><strong>The screen stays put</strong> — the terminal is fixed; only the text inside it moves while the world around it heats up.</li>
+      <li><strong>The log types itself</strong> — entries print at their own scroll positions and rebuild instantly when you scroll back up.</li>
+      <li><strong>Procedural audio</strong> — Tone.js, no audio files. A 55 Hz bed detunes, the filter opens and a tritone creeps in as the heat rises; at the cut everything dies at once.</li>
+      <li><strong>Reduced motion respected</strong> — with <code>prefers-reduced-motion</code> the crossing stops animating and the full log prints on a static sky.</li>
+      <li><strong>One file, no build</strong> — self-contained HTML; the only external dependency is Tone.js from a CDN.</li>
+    </ul>
+
+    <div class="highlight">
+      <div class="hl-label">WHY IT IS HERE</div>
+      Same principle as the pipelines above, applied to a browser instead of a production: one source of truth — the scroll position — drives every layer, so image, text and sound cannot drift out of sync. Consistency held by structure, not by hand-tuned timings.
+    </div>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">Tone.js</span>
+      <span class="tool-tag">Web Audio API</span>
+      <span class="tool-tag">Vanilla JS — single file</span>
+      <span class="tool-tag">Claude</span>
+    </div>
+
+    <a class="aps-link" href="https://github.com/mrmarczyk/brightside" target="_blank" rel="noopener">
+      → github.com/mrmarczyk/brightside
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 07. FASHION                                     -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="fashion">
   <div class="project-header">
-    <span class="project-num">06</span>
+    <span class="project-num">07</span>
     <span class="project-title">Fashion Pipeline</span>
     <span class="project-subtitle">Generated model, real product, no shoot day</span>
     <span class="badge tested">TESTED</span>
