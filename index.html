@@ -38,17 +38,15 @@
       ffmpeg -i SOURCE.png -c:v libwebp -lossless 1 TARGET.webp
 
   SECTION ORDER (nav, numbers and anchors must agree):
-    01 #video-pipeline· tested, measured — days of work down to 4 hours
-    02 #fashion       · tested — product photo in, finished campaign film out
-    03 #film-workflow · the 11-stage system, control loop at every stage
-    04 #witness       · visible proof of consistency, three scenes, one face
-    #film-workflow and #witness stay adjacent — they cross-link both ways.
-    05 #brightside    · live prototype, the one thing a reader can click through
-    06 #deaf-space    · live prototype — image and sound generated in code
+    01 #brightside    · live prototype, the one thing a reader can click through
+    02 #deaf-space    · live prototype — image and sound generated in code
     #brightside and #deaf-space are the two clickable prototypes — keep them
-    adjacent; they read as one pair.
-    07 #conversation  · WIP tool test
-    08 #aps           · theory and standardisation — closes, does not open
+    adjacent; they read as one pair, and they open the page on purpose.
+    03 #video-pipeline· tested, measured — days of work down to 4 hours
+    04 #fashion       · tested — product photo in, finished campaign film out
+    05 #film-workflow · the 11-stage system, control loop at every stage
+    06 #witness       · visible proof of consistency, three scenes, one face
+    #film-workflow and #witness stay adjacent — they cross-link both ways.
     #corporate is kept as an alias anchor for #video-pipeline — old links
     still land. Image folders keep their original names on purpose.
 
@@ -67,6 +65,7 @@
   STATUS BADGES:
     <span class="badge tested">TESTED</span>
     <span class="badge wip">WIP</span>
+    <span class="badge live">PROTOTYPE · LIVE</span>   (deployed and clickable — green, not amber)
     <span class="badge planned">PLANNED</span>
 ════════════════════════════════════════════════════════
 -->
@@ -216,6 +215,16 @@ main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
   color: var(--text-muted);
 }
 
+/* what ships, in facts — sits between the thesis and the tags */
+.hero-build {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* the live prototype is the one thing a reader can try from the top */
+.hero-links a.hero-demo { color: var(--green); font-weight: 500; }
+
 /* the page's thesis, directly under the job title */
 .hero-claim {
   color: var(--text);
@@ -225,7 +234,7 @@ main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
   margin-bottom: 20px;
 }
 
-.hero-links { display: flex; gap: 16px; }
+.hero-links { display: flex; gap: 16px; flex-wrap: wrap; }
 .hero-links a { font-size: 12px; color: var(--blue); }
 
 /* invisible landmark that keeps an old #hash alive after a rename */
@@ -276,6 +285,7 @@ main { max-width: 960px; margin: 0 auto; padding: 48px 24px 96px; }
 }
 .badge.tested { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
 .badge.wip { background: rgba(210,153,34,0.15); color: var(--amber); border: 1px solid rgba(210,153,34,0.3); }
+.badge.live { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
 .badge.planned { background: rgba(88,166,255,0.1); color: var(--blue); border: 1px solid rgba(88,166,255,0.3); }
 .badge.draft { background: rgba(139,148,158,0.15); color: var(--text-muted); border: 1px solid var(--border); }
 
@@ -709,12 +719,12 @@ code {
 
 <!-- NAV -->
 <nav aria-label="Projects">
-  <a class="nav-link" href="#video-pipeline">01-video-pipeline</a>
-  <a class="nav-link" href="#fashion">02-fashion</a>
-  <a class="nav-link" href="#film-workflow">03-film-workflow</a>
-  <a class="nav-link" href="#witness">04-witness</a>
-  <a class="nav-link" href="#brightside">05-brightside</a>
-  <a class="nav-link" href="#deaf-space">06-deaf-space</a>
+  <a class="nav-link" href="#brightside">01-brightside</a>
+  <a class="nav-link" href="#deaf-space">02-deaf-space</a>
+  <a class="nav-link" href="#video-pipeline">03-video-pipeline</a>
+  <a class="nav-link" href="#fashion">04-fashion</a>
+  <a class="nav-link" href="#film-workflow">05-film-workflow</a>
+  <a class="nav-link" href="#witness">06-witness</a>
   <a class="nav-link" href="#conversation">07-conversation</a>
   <a class="nav-link" href="#aps">08-aps</a>
 </nav>
@@ -726,26 +736,156 @@ code {
   <div class="hero-title">Marcin Marczyk</div>
   <div class="hero-sub">AI Creative Producer · Udyssey Creative Technologies · Warsaw</div>
   <div class="hero-claim">Consistency held by structure, not by model memory.</div>
+  <div class="hero-build">Two live prototypes open this page — image and sound generated in code, no audio files, one self-contained HTML file each, no build step.</div>
   <div class="hero-tags">
-    <span class="tag">nearly 20 years in film & TV production</span>
-    <span class="tag">ElevenLabs Impact Program</span>
+    <span class="tag">browser-native prototypes</span>
     <span class="tag">AI workflow design</span>
     <span class="tag">agentic pipelines</span>
+    <span class="tag">nearly 20 years in film & TV production</span>
+    <span class="tag">ElevenLabs Impact Program</span>
     <span class="tag">author of APS</span>
   </div>
   <div class="hero-links">
+    <a class="hero-demo" href="https://mrmarczyk.github.io/brightside/" target="_blank" rel="noopener">→ open a live prototype</a>
     <a href="https://github.com/ai4-film/aps-standard" target="_blank">→ github.com/ai4-film/aps-standard</a>
     <a href="https://linkedin.com/in/mrmarczyk" target="_blank">→ linkedin</a>
   </div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 01. VIDEO PIPELINE                              -->
+<!-- 01. BRIGHTSIDE CROSSING                         -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="brightside">
+  <div class="project-header">
+    <span class="project-num">01</span>
+    <span class="project-title">Brightside Crossing</span>
+    <span class="project-subtitle">Scroll-driven narrative prototype · one input drives image, text and sound</span>
+    <span class="badge live">PROTOTYPE · LIVE</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">A short story you cross rather than read. Scroll is the only control: the sky heats from night to white, an expedition log prints itself onto a CRT, and at perihelion the signal cuts out.</p>
+
+    <a class="demo-link" href="https://mrmarczyk.github.io/brightside/" target="_blank" rel="noopener">
+      <img src="img/07-brightside/crossing.webp" width="1100" height="688" alt="Brightside Crossing prototype — an expedition log printing onto a CRT under a swollen sun" loading="lazy" decoding="async">
+      <span class="demo-open">→ Open the live prototype — click, then scroll</span>
+    </a>
+    <p class="gallery-caption">Captured mid-crossing, day 09. Sound is on by default and follows the scroll position.</p>
+
+    <div class="section-label">The source</div>
+    <p>An adaptation of <em>Brightside Crossing</em> by Alan E. Nourse, first published in <em>Galaxy Science Fiction</em>, January 1956. Four men set out to cross the sunward face of Mercury at perihelion; one came back. The story is in the public domain and every line in the expedition log is quoted from that edition.</p>
+
+    <div class="section-label">How it works</div>
+    <ul class="items">
+      <li><strong>Scroll is the clock</strong> — a single scroll position drives sky colour, sun size, haze, log entries and audio. No timeline, no autoplay, nothing running on its own.</li>
+      <li><strong>The screen stays put</strong> — the terminal is fixed; only the text inside it moves while the world around it heats up.</li>
+      <li><strong>The log types itself</strong> — entries print at their own scroll positions and rebuild instantly when you scroll back up.</li>
+      <li><strong>Procedural audio</strong> — Tone.js, no audio files. A 55 Hz bed detunes, the filter opens and a tritone creeps in as the heat rises; at the cut everything dies at once.</li>
+      <li><strong>Reduced motion respected</strong> — with <code>prefers-reduced-motion</code> the crossing stops animating and the full log prints on a static sky.</li>
+      <li><strong>One file, no build</strong> — self-contained HTML; the only external dependency is Tone.js from a CDN.</li>
+    </ul>
+
+    <div class="highlight">
+      <div class="hl-label">WHY IT IS HERE</div>
+      Same principle as the production pipelines below, applied to a browser instead of a production: one source of truth — the scroll position — drives every layer, so image, text and sound cannot drift out of sync. Consistency held by structure, not by hand-tuned timings.
+    </div>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">Tone.js</span>
+      <span class="tool-tag">Web Audio API</span>
+      <span class="tool-tag">Vanilla JS — single file</span>
+      <span class="tool-tag">Claude</span>
+    </div>
+
+    <a class="aps-link" href="https://github.com/mrmarczyk/brightside" target="_blank" rel="noopener">
+      → github.com/mrmarczyk/brightside
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 02. DEAF SPACE                                  -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="deaf-space">
+  <div class="project-header">
+    <span class="project-num">02</span>
+    <span class="project-title">The Deaf Space — Głucha przestrzeń</span>
+    <span class="project-subtitle">Immersive web prototype · image and sound generated in code, no assets</span>
+    <span class="badge live">PROTOTYPE · LIVE</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">Twelve kilometres of closed track no train has run on for a year, and one man who insists on guarding it. A railway ballad from 1919, adapted into something you walk rather than read — and built to settle one question: how far does a browser get on its own, with no game engine, no recorded audio and no pre-made artwork? One HTML file, 125 KB.</p>
+
+    <p class="cross-link"><a href="#brightside">The same idea one step earlier — Brightside Crossing, above.</a></p>
+
+    <a class="demo-link" href="https://mrmarczyk.github.io/deaf-space/" target="_blank" rel="noopener">
+      <img src="img/08-deaf-space/ravine.webp" width="1100" height="688" alt="The Deaf Space prototype — dusk over the closed track and the mouth of the tunnel, drawn live in Canvas 2D" loading="lazy" decoding="async">
+      <span class="demo-open">→ Open the live prototype — headphones, dark room</span>
+    </a>
+    <p class="gallery-caption">Chapter IV, June — dusk over the closed line, with one of the between-chapter tasks on the left: fitting an iron bar into the gap in the rail. Nothing in the frame is a stored image; the scene is drawn by code, frame by frame. The piece itself is in Polish.</p>
+
+    <div class="section-label">The source</div>
+    <p>An adaptation of <em>Głucha przestrzeń</em> by Stefan Grabiński, from the collection <em>Demon ruchu</em> (The Demon of Motion), 1919. The story is in the public domain; the text was pulled out of the Wolne Lektury edition with a Python script, so every line the reader meets is the original one.</p>
+
+    <div class="section-label">Image — Canvas 2D</div>
+    <ul class="items">
+      <li><strong>Perspective written by hand</strong> — the ravine, the track and its sleepers, the firs, the linesman's hut and the semaphore are 3D geometry put through a one-point projection of my own. No WebGL, no libraries.</li>
+      <li><strong>A season is a set of parameters</strong> — sky colour, fog, vegetation, snow, rain, wind. As the reader moves through the story, the scene blends from one set into the next.</li>
+      <li><strong>Additive light</strong> — station lamps, locomotive headlights, lit carriage windows; over that, particle systems (snow, rain, leaves, steam), depth-based fog and film grain.</li>
+      <li><strong>Listening mode</strong> — the camera drops to the level of the rail.</li>
+    </ul>
+
+    <div class="section-label">Sound — Web Audio, synthesis only</div>
+    <ul class="items">
+      <li><strong>Not one sample in the file</strong> — wind, rain, crickets, frogs, crows, church bells, whispers, the rhythm of the wheels, the steam whistle and the brakes are built from noise (white, pink, brown), oscillators, filters and envelopes.</li>
+      <li><strong>The ravine answers back</strong> — reverb from a generated impulse response, with an echo bouncing alternately left and right. A literal rendering of Grabiński's line about the slopes that tossed the awakened echoes back and forth like balls.</li>
+      <li><strong>Four buses</strong> — ambience, memory, effects, listening — with random events scheduled from the current state of the scene.</li>
+    </ul>
+
+    <div class="section-label">Interface and dramaturgy</div>
+    <ul class="items">
+      <li><strong>Scroll carries the narrative</strong> (IntersectionObserver), but between chapters the reader does the work the story describes: stamping the appointment letter, fitting a missing rail, lighting the lamps, pulling the signal levers, putting an ear to the track.</li>
+      <li><strong>Those controls are SVG</strong> — drag and press-and-hold through Pointer Events, and every one of them also works from the keyboard.</li>
+      <li><strong>After dark the text is lit only by a lantern</strong> that follows the cursor — a radial gradient tracking the pointer across the page.</li>
+      <li><strong>The page remembers</strong> — localStorage records that the space has fallen silent, so a second visit opens in emptiness.</li>
+    </ul>
+
+    <div class="highlight">
+      <div class="hl-label">WHY IT IS HERE</div>
+      Brightside above drives three layers from one input. This one removes the last dependency: nothing can drift out of sync because nothing is pre-made — no image file, no audio file. Season, light, sound and text are all read from a single scene state, and the whole piece ships as one file with no build step.
+    </div>
+
+    <div class="section-label">Process</div>
+    <p>The brief, the choice of text and the art direction are mine. The interaction concept and the implementation were developed together with Claude. An automated Playwright run in Chromium walks the whole piece, from the entry screen to the finale.</p>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">Canvas 2D</span>
+      <span class="tool-tag">Web Audio API</span>
+      <span class="tool-tag">SVG + Pointer Events</span>
+      <span class="tool-tag">Vanilla JS — single file</span>
+      <span class="tool-tag">Playwright</span>
+      <span class="tool-tag">Claude</span>
+    </div>
+    <p class="gallery-caption">Typography: Old Standard TT · Big Shoulders Stencil · IBM Plex Mono.</p>
+
+    <a class="aps-link" href="https://github.com/mrmarczyk/deaf-space" target="_blank" rel="noopener">
+      → github.com/mrmarczyk/deaf-space
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 03. VIDEO PIPELINE                              -->
 <!-- ══════════════════════════════════════════════════════ -->
 <span class="anchor-alias" id="corporate"></span>
 <section class="project" id="video-pipeline">
   <div class="project-header">
-    <span class="project-num">01</span>
+    <span class="project-num">03</span>
     <span class="project-title">Video Pipeline</span>
     <span class="project-subtitle">Script to master — licensed stock, automated timeline, AI inpainting</span>
     <span class="badge tested">STAGES 01–07</span>
@@ -934,11 +1074,11 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 02. FASHION                                     -->
+<!-- 04. FASHION                                     -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="fashion">
   <div class="project-header">
-    <span class="project-num">02</span>
+    <span class="project-num">04</span>
     <span class="project-title">Fashion Pipeline</span>
     <span class="project-subtitle">Generated model, real product, no shoot day</span>
     <span class="badge tested">TESTED</span>
@@ -989,11 +1129,11 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 03. FILM WORKFLOW                               -->
+<!-- 05. FILM WORKFLOW                               -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="film-workflow">
   <div class="project-header">
-    <span class="project-num">03</span>
+    <span class="project-num">05</span>
     <span class="project-title">Film Workflow</span>
     <span class="project-subtitle">AI-Assisted Film Production Pipeline · Human-in-the-loop</span>
     <span class="badge tested">STAGES 01–04</span>
@@ -1122,11 +1262,11 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 04. WITNESS                                     -->
+<!-- 06. WITNESS                                     -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="witness">
   <div class="project-header">
-    <span class="project-num">04</span>
+    <span class="project-num">06</span>
     <span class="project-title">Witness — Visual Identity Lock</span>
     <span class="project-subtitle">AI-Assisted Film Production Pipeline · Stage 04</span>
     <span class="badge tested">TESTED</span>
@@ -1186,133 +1326,6 @@ code {
       <span class="tool-tag">Nano Banana Pro (Gemini Flash)</span>
       <span class="tool-tag">VEO 3.1</span>
     </div>
-
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!-- 05. BRIGHTSIDE CROSSING                         -->
-<!-- ══════════════════════════════════════════════════════ -->
-<section class="project" id="brightside">
-  <div class="project-header">
-    <span class="project-num">05</span>
-    <span class="project-title">Brightside Crossing</span>
-    <span class="project-subtitle">Scroll-driven narrative prototype · one input drives image, text and sound</span>
-    <span class="badge wip">PROTOTYPE · LIVE</span>
-  </div>
-  <div class="project-body">
-
-    <p class="lead">A short story you cross rather than read. Scroll is the only control: the sky heats from night to white, an expedition log prints itself onto a CRT, and at perihelion the signal cuts out.</p>
-
-    <a class="demo-link" href="https://mrmarczyk.github.io/brightside/" target="_blank" rel="noopener">
-      <img src="img/07-brightside/crossing.webp" width="1100" height="688" alt="Brightside Crossing prototype — an expedition log printing onto a CRT under a swollen sun" loading="lazy" decoding="async">
-      <span class="demo-open">→ Open the live prototype — click, then scroll</span>
-    </a>
-    <p class="gallery-caption">Captured mid-crossing, day 09. Sound is on by default and follows the scroll position.</p>
-
-    <div class="section-label">The source</div>
-    <p>An adaptation of <em>Brightside Crossing</em> by Alan E. Nourse, first published in <em>Galaxy Science Fiction</em>, January 1956. Four men set out to cross the sunward face of Mercury at perihelion; one came back. The story is in the public domain and every line in the expedition log is quoted from that edition.</p>
-
-    <div class="section-label">How it works</div>
-    <ul class="items">
-      <li><strong>Scroll is the clock</strong> — a single scroll position drives sky colour, sun size, haze, log entries and audio. No timeline, no autoplay, nothing running on its own.</li>
-      <li><strong>The screen stays put</strong> — the terminal is fixed; only the text inside it moves while the world around it heats up.</li>
-      <li><strong>The log types itself</strong> — entries print at their own scroll positions and rebuild instantly when you scroll back up.</li>
-      <li><strong>Procedural audio</strong> — Tone.js, no audio files. A 55 Hz bed detunes, the filter opens and a tritone creeps in as the heat rises; at the cut everything dies at once.</li>
-      <li><strong>Reduced motion respected</strong> — with <code>prefers-reduced-motion</code> the crossing stops animating and the full log prints on a static sky.</li>
-      <li><strong>One file, no build</strong> — self-contained HTML; the only external dependency is Tone.js from a CDN.</li>
-    </ul>
-
-    <div class="highlight">
-      <div class="hl-label">WHY IT IS HERE</div>
-      Same principle as the pipelines above, applied to a browser instead of a production: one source of truth — the scroll position — drives every layer, so image, text and sound cannot drift out of sync. Consistency held by structure, not by hand-tuned timings.
-    </div>
-
-    <div class="section-label">Tools</div>
-    <div class="tools-row">
-      <span class="tool-tag">Tone.js</span>
-      <span class="tool-tag">Web Audio API</span>
-      <span class="tool-tag">Vanilla JS — single file</span>
-      <span class="tool-tag">Claude</span>
-    </div>
-
-    <a class="aps-link" href="https://github.com/mrmarczyk/brightside" target="_blank" rel="noopener">
-      → github.com/mrmarczyk/brightside
-    </a>
-
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!-- 06. DEAF SPACE                                  -->
-<!-- ══════════════════════════════════════════════════════ -->
-<section class="project" id="deaf-space">
-  <div class="project-header">
-    <span class="project-num">06</span>
-    <span class="project-title">The Deaf Space — Głucha przestrzeń</span>
-    <span class="project-subtitle">Immersive web prototype · image and sound generated in code, no assets</span>
-    <span class="badge wip">PROTOTYPE · LIVE</span>
-  </div>
-  <div class="project-body">
-
-    <p class="lead">Twelve kilometres of closed track no train has run on for a year, and one man who insists on guarding it. A railway ballad from 1919, adapted into something you walk rather than read — and built to settle one question: how far does a browser get on its own, with no game engine, no recorded audio and no pre-made artwork? One HTML file, 125 KB.</p>
-
-    <p class="cross-link"><a href="#brightside">The same idea one step earlier — Brightside Crossing, above.</a></p>
-
-    <a class="demo-link" href="https://mrmarczyk.github.io/deaf-space/" target="_blank" rel="noopener">
-      <img src="img/08-deaf-space/ravine.webp" width="1100" height="688" alt="The Deaf Space prototype — dusk over the closed track and the mouth of the tunnel, drawn live in Canvas 2D" loading="lazy" decoding="async">
-      <span class="demo-open">→ Open the live prototype — headphones, dark room</span>
-    </a>
-    <p class="gallery-caption">Chapter IV, June — dusk over the closed line, with one of the between-chapter tasks on the left: fitting an iron bar into the gap in the rail. Nothing in the frame is a stored image; the scene is drawn by code, frame by frame. The piece itself is in Polish.</p>
-
-    <div class="section-label">The source</div>
-    <p>An adaptation of <em>Głucha przestrzeń</em> by Stefan Grabiński, from the collection <em>Demon ruchu</em> (The Demon of Motion), 1919. The story is in the public domain; the text was pulled out of the Wolne Lektury edition with a Python script, so every line the reader meets is the original one.</p>
-
-    <div class="section-label">Image — Canvas 2D</div>
-    <ul class="items">
-      <li><strong>Perspective written by hand</strong> — the ravine, the track and its sleepers, the firs, the linesman's hut and the semaphore are 3D geometry put through a one-point projection of my own. No WebGL, no libraries.</li>
-      <li><strong>A season is a set of parameters</strong> — sky colour, fog, vegetation, snow, rain, wind. As the reader moves through the story, the scene blends from one set into the next.</li>
-      <li><strong>Additive light</strong> — station lamps, locomotive headlights, lit carriage windows; over that, particle systems (snow, rain, leaves, steam), depth-based fog and film grain.</li>
-      <li><strong>Listening mode</strong> — the camera drops to the level of the rail.</li>
-    </ul>
-
-    <div class="section-label">Sound — Web Audio, synthesis only</div>
-    <ul class="items">
-      <li><strong>Not one sample in the file</strong> — wind, rain, crickets, frogs, crows, church bells, whispers, the rhythm of the wheels, the steam whistle and the brakes are built from noise (white, pink, brown), oscillators, filters and envelopes.</li>
-      <li><strong>The ravine answers back</strong> — reverb from a generated impulse response, with an echo bouncing alternately left and right. A literal rendering of Grabiński's line about the slopes that tossed the awakened echoes back and forth like balls.</li>
-      <li><strong>Four buses</strong> — ambience, memory, effects, listening — with random events scheduled from the current state of the scene.</li>
-    </ul>
-
-    <div class="section-label">Interface and dramaturgy</div>
-    <ul class="items">
-      <li><strong>Scroll carries the narrative</strong> (IntersectionObserver), but between chapters the reader does the work the story describes: stamping the appointment letter, fitting a missing rail, lighting the lamps, pulling the signal levers, putting an ear to the track.</li>
-      <li><strong>Those controls are SVG</strong> — drag and press-and-hold through Pointer Events, and every one of them also works from the keyboard.</li>
-      <li><strong>After dark the text is lit only by a lantern</strong> that follows the cursor — a radial gradient tracking the pointer across the page.</li>
-      <li><strong>The page remembers</strong> — localStorage records that the space has fallen silent, so a second visit opens in emptiness.</li>
-    </ul>
-
-    <div class="highlight">
-      <div class="hl-label">WHY IT IS HERE</div>
-      Brightside above drives three layers from one input. This one removes the last dependency: nothing can drift out of sync because nothing is pre-made — no image file, no audio file. Season, light, sound and text are all read from a single scene state, and the whole piece ships as one file with no build step.
-    </div>
-
-    <div class="section-label">Process</div>
-    <p>The brief, the choice of text and the art direction are mine. The interaction concept and the implementation were developed together with Claude. An automated Playwright run in Chromium walks the whole piece, from the entry screen to the finale.</p>
-
-    <div class="section-label">Tools</div>
-    <div class="tools-row">
-      <span class="tool-tag">Canvas 2D</span>
-      <span class="tool-tag">Web Audio API</span>
-      <span class="tool-tag">SVG + Pointer Events</span>
-      <span class="tool-tag">Vanilla JS — single file</span>
-      <span class="tool-tag">Playwright</span>
-      <span class="tool-tag">Claude</span>
-    </div>
-    <p class="gallery-caption">Typography: Old Standard TT · Big Shoulders Stencil · IBM Plex Mono.</p>
-
-    <a class="aps-link" href="https://github.com/mrmarczyk/deaf-space" target="_blank" rel="noopener">
-      → github.com/mrmarczyk/deaf-space
-    </a>
 
   </div>
 </section>
