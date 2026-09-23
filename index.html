@@ -27,6 +27,8 @@
     pipeline-diagram.webp     (pipeline-portfolio-diagram.png)
   /img/05-corporate/
     pipeline-diagram.webp     (corporate-video-pipeline.png)
+  /img/08-deaf-space/
+    ravine.webp               (captured from the live prototype)
 
   TO UPDATE AN IMAGE:
     Drop the new source in Sources/ and re-encode to the same .webp filename —
@@ -42,8 +44,11 @@
     04 #witness       · visible proof of consistency, three scenes, one face
     #film-workflow and #witness stay adjacent — they cross-link both ways.
     05 #brightside    · live prototype, the one thing a reader can click through
-    06 #conversation  · WIP tool test
-    07 #aps           · theory and standardisation — closes, does not open
+    06 #deaf-space    · live prototype — image and sound generated in code
+    #brightside and #deaf-space are the two clickable prototypes — keep them
+    adjacent; they read as one pair.
+    07 #conversation  · WIP tool test
+    08 #aps           · theory and standardisation — closes, does not open
     #corporate is kept as an alias anchor for #video-pipeline — old links
     still land. Image folders keep their original names on purpose.
 
@@ -709,8 +714,9 @@ code {
   <a class="nav-link" href="#film-workflow">03-film-workflow</a>
   <a class="nav-link" href="#witness">04-witness</a>
   <a class="nav-link" href="#brightside">05-brightside</a>
-  <a class="nav-link" href="#conversation">06-conversation</a>
-  <a class="nav-link" href="#aps">07-aps</a>
+  <a class="nav-link" href="#deaf-space">06-deaf-space</a>
+  <a class="nav-link" href="#conversation">07-conversation</a>
+  <a class="nav-link" href="#aps">08-aps</a>
 </nav>
 
 <main>
@@ -1238,11 +1244,85 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 06. CONVERSATION                                -->
+<!-- 06. DEAF SPACE                                  -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section class="project" id="deaf-space">
+  <div class="project-header">
+    <span class="project-num">06</span>
+    <span class="project-title">The Deaf Space — Głucha przestrzeń</span>
+    <span class="project-subtitle">Immersive web prototype · image and sound generated in code, no assets</span>
+    <span class="badge wip">PROTOTYPE · LIVE</span>
+  </div>
+  <div class="project-body">
+
+    <p class="lead">Twelve kilometres of closed track no train has run on for a year, and one man who insists on guarding it. A railway ballad from 1919, adapted into something you walk rather than read — and built to settle one question: how far does a browser get on its own, with no game engine, no recorded audio and no pre-made artwork? One HTML file, 125 KB.</p>
+
+    <p class="cross-link"><a href="#brightside">The same idea one step earlier — Brightside Crossing, above.</a></p>
+
+    <a class="demo-link" href="https://mrmarczyk.github.io/deaf-space/" target="_blank" rel="noopener">
+      <img src="img/08-deaf-space/ravine.webp" width="1100" height="688" alt="The Deaf Space prototype — dusk over the closed track and the mouth of the tunnel, drawn live in Canvas 2D" loading="lazy" decoding="async">
+      <span class="demo-open">→ Open the live prototype — headphones, dark room</span>
+    </a>
+    <p class="gallery-caption">Chapter IV, June — dusk over the closed line, with one of the between-chapter tasks on the left: fitting an iron bar into the gap in the rail. Nothing in the frame is a stored image; the scene is drawn by code, frame by frame. The piece itself is in Polish.</p>
+
+    <div class="section-label">The source</div>
+    <p>An adaptation of <em>Głucha przestrzeń</em> by Stefan Grabiński, from the collection <em>Demon ruchu</em> (The Demon of Motion), 1919. The story is in the public domain; the text was pulled out of the Wolne Lektury edition with a Python script, so every line the reader meets is the original one.</p>
+
+    <div class="section-label">Image — Canvas 2D</div>
+    <ul class="items">
+      <li><strong>Perspective written by hand</strong> — the ravine, the track and its sleepers, the firs, the linesman's hut and the semaphore are 3D geometry put through a one-point projection of my own. No WebGL, no libraries.</li>
+      <li><strong>A season is a set of parameters</strong> — sky colour, fog, vegetation, snow, rain, wind. As the reader moves through the story, the scene blends from one set into the next.</li>
+      <li><strong>Additive light</strong> — station lamps, locomotive headlights, lit carriage windows; over that, particle systems (snow, rain, leaves, steam), depth-based fog and film grain.</li>
+      <li><strong>Listening mode</strong> — the camera drops to the level of the rail.</li>
+    </ul>
+
+    <div class="section-label">Sound — Web Audio, synthesis only</div>
+    <ul class="items">
+      <li><strong>Not one sample in the file</strong> — wind, rain, crickets, frogs, crows, church bells, whispers, the rhythm of the wheels, the steam whistle and the brakes are built from noise (white, pink, brown), oscillators, filters and envelopes.</li>
+      <li><strong>The ravine answers back</strong> — reverb from a generated impulse response, with an echo bouncing alternately left and right. A literal rendering of Grabiński's line about the slopes that tossed the awakened echoes back and forth like balls.</li>
+      <li><strong>Four buses</strong> — ambience, memory, effects, listening — with random events scheduled from the current state of the scene.</li>
+    </ul>
+
+    <div class="section-label">Interface and dramaturgy</div>
+    <ul class="items">
+      <li><strong>Scroll carries the narrative</strong> (IntersectionObserver), but between chapters the reader does the work the story describes: stamping the appointment letter, fitting a missing rail, lighting the lamps, pulling the signal levers, putting an ear to the track.</li>
+      <li><strong>Those controls are SVG</strong> — drag and press-and-hold through Pointer Events, and every one of them also works from the keyboard.</li>
+      <li><strong>After dark the text is lit only by a lantern</strong> that follows the cursor — a radial gradient tracking the pointer across the page.</li>
+      <li><strong>The page remembers</strong> — localStorage records that the space has fallen silent, so a second visit opens in emptiness.</li>
+    </ul>
+
+    <div class="highlight">
+      <div class="hl-label">WHY IT IS HERE</div>
+      Brightside above drives three layers from one input. This one removes the last dependency: nothing can drift out of sync because nothing is pre-made — no image file, no audio file. Season, light, sound and text are all read from a single scene state, and the whole piece ships as one file with no build step.
+    </div>
+
+    <div class="section-label">Process</div>
+    <p>The brief, the choice of text and the art direction are mine. The interaction concept and the implementation were developed together with Claude. An automated Playwright run in Chromium walks the whole piece, from the entry screen to the finale.</p>
+
+    <div class="section-label">Tools</div>
+    <div class="tools-row">
+      <span class="tool-tag">Canvas 2D</span>
+      <span class="tool-tag">Web Audio API</span>
+      <span class="tool-tag">SVG + Pointer Events</span>
+      <span class="tool-tag">Vanilla JS — single file</span>
+      <span class="tool-tag">Playwright</span>
+      <span class="tool-tag">Claude</span>
+    </div>
+    <p class="gallery-caption">Typography: Old Standard TT · Big Shoulders Stencil · IBM Plex Mono.</p>
+
+    <a class="aps-link" href="https://github.com/mrmarczyk/deaf-space" target="_blank" rel="noopener">
+      → github.com/mrmarczyk/deaf-space
+    </a>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 07. CONVERSATION                                -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="conversation">
   <div class="project-header">
-    <span class="project-num">06</span>
+    <span class="project-num">07</span>
     <span class="project-title">Conversation — Nie odbyła się (It Never Happened)</span>
     <span class="project-subtitle">AI-Generated Dialogue Series · Work in Progress</span>
     <span class="badge wip">WIP · TOOL TEST</span>
@@ -1300,11 +1380,11 @@ code {
 </section>
 
 <!-- ══════════════════════════════════════════════════════ -->
-<!-- 07. APS                                         -->
+<!-- 08. APS                                         -->
 <!-- ══════════════════════════════════════════════════════ -->
 <section class="project" id="aps">
   <div class="project-header">
-    <span class="project-num">07</span>
+    <span class="project-num">08</span>
     <span class="project-title">APS — AI Production Standard</span>
     <span class="project-subtitle">Open draft standard for AI documentation in film production</span>
     <span class="badge draft">DRAFT FOR REVIEW</span>
